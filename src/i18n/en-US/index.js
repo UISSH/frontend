@@ -1,0 +1,42 @@
+// This is just an example,
+// so you can safely delete all default props below
+
+export default {
+  failed: 'Action failed',
+  success: 'Action was successful',
+  reStart: 'reStart',
+  start: 'start',
+  stop: 'stop',
+  delete: 'delete',
+  chart: 'chart',
+  ram: 'ram',
+  status: 'status',
+  'new website': 'new website',
+  ssl: 'SSL',
+  database: 'database',
+  path: 'Path',
+  application: 'Application',
+  overview: 'overview',
+  ens: 'ens',
+  website: 'website',
+  charts: 'charts',
+  cpu: 'cpu',
+  next: 'next',
+  'enable SSL': 'Enable SSL',
+  'basic': 'Basic',
+  'directory': 'directory',
+  'domain': 'domain',
+  'create DataBase': 'Create DataBase',
+  'providers': 'Providers',
+  "DB User": "DB User",
+  "DB Name": "DB Name",
+  "DB Password": "DB Password",
+  "search": "search",
+  "name": "name",
+  "oops": "oops",
+  'message': 'message',
+  'linux':{
+    'load average':'load average',
+    'disk':'disk'
+  }
+}
