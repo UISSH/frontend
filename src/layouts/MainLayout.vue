@@ -17,7 +17,9 @@
 
         </q-toolbar-title>
 
-        <div>Alpha v{{ pkJson.version }}</div>
+        <q-btn class="text-capitalize" flat href="https://github.com/UISSH/" no-caps target="_blank" type="a">alpha
+          v{{ pkJson.version }}
+        </q-btn>
       </q-toolbar>
     </q-header>
 

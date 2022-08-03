@@ -1,9 +1,9 @@
 <template>
   <q-layout>
     <q-page class="flex flex-center full-height full-width bg-blue-grey-1">
-      <q-card class="apple-card card  ">
+      <q-card class="apple-card card">
         <q-card-section class="bg-blue-grey-2">
-          <div class="text-body1 text-center text-capitalize">login</div>
+          <div class="text-body1 text-center text-capitalize">login your server</div>
         </q-card-section>
 
         <q-card-section class="q-pa-lg q-gutter-sm">

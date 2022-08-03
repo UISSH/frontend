@@ -11,10 +11,14 @@ if (process.env.DEV) {
 
 
 const errorHandler = (error) => {
+
+  if(error.config.url ==='/api/User/login/'){
+    return Promise.reject(error)
+  }
   let token = Cookies.get(ACCESS_TOKEN)
-  // if (token == null) {
-  //   window.location.href = "/"
-  // }
+  if (token == null) {
+    window.location.href = "/"
+  }
 
   console.log({'errerr':error})
   return Promise.reject(error)
