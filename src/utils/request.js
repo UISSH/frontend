@@ -9,12 +9,14 @@ if (process.env.DEV) {
   console.log(process.env.API)
 }
 
-// 异常拦截处理器
+
 const errorHandler = (error) => {
-  const token = Cookies.get(ACCESS_TOKEN)
-  if (token == null) {
-    window.location.href = "/"
-  }
+  let token = Cookies.get(ACCESS_TOKEN)
+  // if (token == null) {
+  //   window.location.href = "/"
+  // }
+
+  console.log({'errerr':error})
   return Promise.reject(error)
 }
 
@@ -25,19 +27,23 @@ let _request = () => {
     api = process.env.API
     window.localStorage.setItem("api_url", api)
   }
-  console.log("================>" + api)
+  console.debug({"api address": api})
   let request = axios.create({
-    // API 请求的默认前缀
     baseURL: api,
-    timeout: 10 * 60 * 1000 // 请求超时时间
+    timeout: 10 * 60 * 1000
   })
   request.interceptors.request.use(config => {
-    const token = Cookies.get(ACCESS_TOKEN)
+    let token = Cookies.get(ACCESS_TOKEN)
     if (token) {
       config.headers['Authorization'] = 'token ' + token
     }
-    const csrfToken = Cookies.get('csrftoken');
-    config.headers['X-CSRFToken'] = csrfToken
+
+    //
+    let csrfToken = Cookies.get('csrftoken');
+    if (csrfToken) {
+      config.headers['X-CSRFToken'] = csrfToken
+    }
+
     return config
   }, errorHandler)
 
