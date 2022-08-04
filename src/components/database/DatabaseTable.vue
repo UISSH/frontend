@@ -28,7 +28,7 @@
           <div class="flex q-gutter-sm">
             <q-btn color="blue-grey" icon="o_add" @click="ui.DatabaseDialog.show=true"></q-btn>
 
-            <q-btn color="yellow-10" icon="o_login" type="a" :href="ui.PHPMyAdmin.url" target="_blank">
+            <q-btn :href="ui.PHPMyAdmin.url" color="yellow-10" icon="o_login" target="_blank" type="a">
               <q-tooltip>open phpmyadmin</q-tooltip>
             </q-btn>
             <q-btn v-if="tableSelected.length===1" color="red" icon="o_remove"
@@ -141,8 +141,8 @@ export default {
       DatabaseDialog: {
         show: false
       },
-      PHPMyAdmin:{
-        url :null
+      PHPMyAdmin: {
+        url: null
       }
     })
 
@@ -173,6 +173,9 @@ export default {
 
     function getPHPMyAdminUrl() {
       let url = window.localStorage.getItem("api_url")
+      if (url === "/") {
+        url = window.location.href
+      }
       let domain = (new URL(url));
       return domain.protocol + "//" + domain.hostname + ":8080"
     }
@@ -202,9 +205,10 @@ export default {
         }, 200)
       })
     }
-    function toDatabaseSettings(id){
+
+    function toDatabaseSettings(id) {
       console.log(id)
-      router.push({"name":"databaseSettings",params:{"id":id}})
+      router.push({"name": "databaseSettings", params: {"id": id}})
     }
 
 
