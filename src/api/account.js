@@ -8,6 +8,7 @@ const api = {
 }
 
 export async function requestLogin(data) {
+  Cookies.remove(ACCESS_TOKEN)
   let res = await request({
     method: 'post',
     url: `${api.account}/login/`,

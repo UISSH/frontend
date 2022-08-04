@@ -24,7 +24,6 @@ const errorHandler = (error) => {
   return Promise.reject(error)
 }
 
-
 let _request = () => {
   let api = window.localStorage.getItem("api_url")
   if (api == null) {
