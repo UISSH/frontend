@@ -58,13 +58,33 @@ export function executeCMD(data) {
   })
 }
 
-export function getDownloadFileUrl(absPath) {
-  return request.getUri({
-    url: request.defaults.baseURL + `api/FileBrowser/download_file/`,
+export async function requestDownloadFileToken(absPath) {
+  return await request({
+    url: `${api.fileBrowser}/request_download_file/`,
     params: {
       "path": absPath
     }
   })
+}
+
+export function downloadFile(absPath) {
+  requestDownloadFileToken(absPath).then(data => {
+    let _api = request.defaults.baseURL + `/api/FileBrowser/download_file/`
+    if (request.defaults.baseURL.endsWith("/")) {
+      _api = request.defaults.baseURL + `api/FileBrowser/download_file/`
+    }
+    let url = request.getUri({
+      url: _api,
+      params: {
+        "path": absPath,
+        "token": data.msg
+      }
+    })
+    console.log(url)
+
+    window.location.href = url
+  })
+
 }
 
 export function uploadFile(directory, file) {

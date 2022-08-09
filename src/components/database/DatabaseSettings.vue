@@ -102,8 +102,8 @@
               <q-td :props="props">
                 <q-btn color="info" flat icon="o_rotate_left" label="recover" no-caps
                        @click="requestImportBackup(props.value)"></q-btn>
-                <q-btn :href="requestDownloadFile(props.value)" color="dark" flat icon="o_download" label="download"
-                       no-caps target="_blank" type="a"></q-btn>
+                <q-btn color="dark" flat icon="o_download" label="download" no-caps
+                       @click="requestDownloadFile(props.value)"></q-btn>
               </q-td>
             </template>
           </q-table>
@@ -124,8 +124,8 @@
 import {onMounted, ref} from "vue";
 import {exportBackup, getDatabase, importBackup, updateDatabase} from "src/api/database";
 import {errorLoading, hideLoading, showLoading} from "src/utils/loading";
-import {date, format, useQuasar} from "quasar";
-import {getDownloadFileUrl, listDirectory, uploadFile} from "src/api/filebrowser";
+import {date, format, openURL, useQuasar} from "quasar";
+import {downloadFile, listDirectory, uploadFile} from "src/api/filebrowser";
 import {useRouter} from "vue-router";
 
 
@@ -203,7 +203,7 @@ export default {
     }
 
     function requestDownloadFile(path) {
-      return getDownloadFileUrl(path)
+      downloadFile(path)
     }
 
     function requestExportBackup() {
@@ -286,6 +286,7 @@ export default {
         }
       })
     }
+
     function enterFolder(path) {
       let arrPath = path.split('/')
       arrPath.pop(-1)
@@ -315,7 +316,7 @@ export default {
       humanStorageSize,
       date,
       requestUploadFile,
-      columns, tableData, requestDownloadFile, requestExportBackup, requestImportBackup, enterFolder,editFile
+      columns, tableData, requestDownloadFile, requestExportBackup, requestImportBackup, enterFolder, editFile
     }
   }
 }

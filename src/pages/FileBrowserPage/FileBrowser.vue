@@ -9,7 +9,7 @@
             <q-btn :disable="params.directory==='/'" dense flat icon="o_arrow_back" @click="backToPrevious()"></q-btn>
           </template>
           <template v-slot:append>
-            <q-btn color="dark" icon="o_refresh" flat @click="enterDirectory"></q-btn>
+            <q-btn color="dark" flat icon="o_refresh" @click="enterDirectory"></q-btn>
             <div style="width: 8px"></div>
           </template>
 
@@ -85,8 +85,8 @@
             <div class="flex no-wrap q-gutter-xs justify-end">
               <div v-if="props.row.type==='directory'"></div>
               <div v-else>
-                <q-btn :href="requestDownloadFile(props.value)" dense flat icon="download" target="_blank"
-                       type="a"></q-btn>
+                <q-btn dense flat icon="download" @click="requestDownloadFile(props.value)"
+                ></q-btn>
               </div>
             </div>
           </q-td>
@@ -101,7 +101,7 @@
 <script>
 import {nextTick, onMounted, ref} from "vue";
 import {listResStruct} from "src/utils/struct";
-import {executeCMD, getDownloadFileUrl, getUsers, listDirectory, uploadFile} from "src/api/filebrowser";
+import {downloadFile, executeCMD, getUsers, listDirectory, uploadFile} from "src/api/filebrowser";
 import {date, format, useQuasar} from "quasar";
 import {errorLoading, hideLoading, showLoading} from "src/utils/loading";
 import {useRoute, useRouter} from "vue-router";
@@ -243,7 +243,7 @@ export default {
     }
 
     function requestDownloadFile(path) {
-      return getDownloadFileUrl(path)
+      downloadFile(path)
     }
 
     onMounted(() => {
