@@ -73,7 +73,7 @@
     </template>
 
     <template v-slot:body-cell-database="props">
-      <q-td v-if="props.value" :props="props" @click="Public.alert(props.row.database_id)">
+      <q-td v-if="props.value" :props="props" @click="navDatabaseSettings(props.row.database_id)">
         <div class="flex justify-end items-center q-gutter-sm" style="cursor: pointer">
           <div>{{ props.value }}</div>
           <q-icon color="blue-grey" name="o_storage"></q-icon>
@@ -103,9 +103,20 @@
           <q-toggle :model-value="props.row.ssl_enable" checkedIcon="enhanced_encryption"
                     color="green"
                     unchecked-icon="no_encryption"
-                    @click="requestPutWebsite(props.row)"></q-toggle>
+                    @click="requestPutWebsiteSSL(props.row)"></q-toggle>
         </div>
 
+      </q-td>
+    </template>
+
+    <template v-slot:body-cell-status="props">
+      <q-td :props="props">
+        <q-icon v-if="props.value===1" color="green" name="o_check_circle_outline" size="24px">
+          <q-tooltip>{{ props.row.status_text }}</q-tooltip>
+        </q-icon>
+        <q-icon v-else color="red" name="o_error" size="24px">
+          <q-tooltip>{{ props.row.status_text }}</q-tooltip>
+        </q-icon>
       </q-td>
     </template>
 
@@ -130,7 +141,7 @@ import NewWebsite from "components/website/NewWebsite";
 import {openURL, useQuasar} from "quasar";
 import {listResStruct} from "src/utils/struct";
 
-import {deleteWebsite, listWebsite, putWebsite} from "src/api/website";
+import {deleteWebsite, disableWebsiteSSL, enableWebsiteSSL, listWebsite} from "src/api/website";
 import {errorLoading, hideLoading, showLoading} from "src/utils/loading";
 import {doApplication} from "src/api/application";
 import {useRouter} from "vue-router";
@@ -214,8 +225,8 @@ export default {
       ui.value.StartWebsiteBtn.show = _bool
     })
 
-    function toWebsiteSettings(id){
-      router.push({"name":"websiteSettings",params:{"id":id}})
+    function toWebsiteSettings(id) {
+      router.push({"name": "websiteSettings", params: {"id": id}})
     }
 
     function enterFolder(path) {
@@ -226,6 +237,10 @@ export default {
           'directory': path
         }
       })
+    }
+
+    function navDatabaseSettings(id) {
+      router.push({"name": "databaseSettings", params: {"id": id}})
     }
 
     function onUpdatePagination(page) {
@@ -266,15 +281,20 @@ export default {
 
     }
 
-    function requestPutWebsite(row) {
+    function requestPutWebsiteSSL(row) {
       row.ssl_enable = !row.ssl_enable
+      let _request
+      if (row.ssl_enable) {
+        _request = enableWebsiteSSL
+      } else {
+        _request = disableWebsiteSSL
+      }
       let data = toRaw(row)
       showLoading($q)
-      putWebsite(data.id, data).then(res => {
+      _request(data.id, data).then(res => {
         console.log({'putWebsite': res})
       }).catch(err => {
         errorLoading($q, err)
-        console.error({'putWebsite': err})
       }).finally(() => {
         hideLoading($q)
         requestInstance()
@@ -299,8 +319,20 @@ export default {
       })
     })
     return {
-      tableData, params, tableSelected, onSearch, onUpdatePagination, columns,
-      ui, Public, requestInstance, requestPutWebsite, requestDeleteWebsite, requestApplicationAction,toWebsiteSettings,enterFolder
+      tableData,
+      params,
+      tableSelected,
+      onSearch,
+      onUpdatePagination,
+      columns,
+      ui,
+      Public,
+      requestInstance,
+      requestPutWebsiteSSL,
+      requestDeleteWebsite,
+      requestApplicationAction,
+      toWebsiteSettings,
+      enterFolder, navDatabaseSettings
     }
   }
 }

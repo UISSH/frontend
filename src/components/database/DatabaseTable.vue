@@ -54,7 +54,7 @@
       </template>
       <template v-slot:body-cell-name="props">
         <q-td :props="props">
-          <div class="flex justify-end q-gutter-sm items-baseline">
+          <div class="flex justify-end q-gutter-sm items-baseline no-wrap">
             <div>{{ props.value }}</div>
             <div>
               <q-icon name="o_settings" size="18px" @click="toDatabaseSettings(props.key)"></q-icon>
@@ -63,7 +63,7 @@
         </q-td>
       </template>
       <template v-slot:body-cell-username="props">
-        <q-td :props="props">
+        <q-td :props="props" >
           <div class="flex justify-end">
             <input-area :value="props.value" type="text"></input-area>
           </div>
@@ -82,7 +82,7 @@
                 PENDING = 0, "pending"
                 SUCCESS = 1, "success"
                 FAILED = 2, "failed"-->
-        <q-td :props="props">
+        <q-td :props="props" >
           <div v-if="props.row.create_status===1">
             <q-icon color="green" name="o_check_circle" size="24px">
               <q-tooltip>created in the system.</q-tooltip>

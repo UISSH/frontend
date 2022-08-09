@@ -1,6 +1,6 @@
 <template>
 
-  <div class="flex justify-end items-baseline ">
+  <div class="flex justify-end items-baseline no-wrap">
     <div><input :type="props.type" :value="props.value" class="q-field__input q-pa-sm text-right"></div>
     <div>
       <q-icon :color="ui.color" name="o_copy" size="16px" style="cursor: pointer"

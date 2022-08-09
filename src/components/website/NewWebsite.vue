@@ -76,7 +76,10 @@
     <q-card-section class="flex q-gutter-md justify-end">
       <q-toggle v-model="ui.card_1.createDatabaseToggle" :label="$t('Create DataBase')" color="dark" dense
                 icon="storage"></q-toggle>
-      <q-toggle v-model="ui.card_1.sslToggle" :label="$t('Enable SSL')" color="green" dense icon="security"></q-toggle>
+      <q-toggle v-if="data.form.websiteForm.domain" v-model="ui.card_1.sslToggle" :label="$t('Enable SSL')"
+                color="green"
+
+                dense icon="security" @update:model-value="requestVerifyDomainRecords"></q-toggle>
       <!--      <q-toggle v-model="ui.card_1.enableBackupToggle" color="blue-grey" icon="cloud"-->
       <!--                label="Enable Cloud Backup"></q-toggle>-->
       <!--      <q-toggle v-model="ui.card_1.enableBackupToggle" color="grey" icon="cloud_off"-->
@@ -125,7 +128,7 @@
 
 <script>
 import {onMounted, onUnmounted, ref, toRaw, watchEffect} from "vue";
-import {createWebsite, listApplication} from "src/api/website";
+import {createWebsite, enableWebsiteSSL, listApplication, verifyDomainRecords} from "src/api/website";
 import {userInfo} from "src/utils/struct";
 import {generateDBPassword} from "src/utils/generate";
 import {errorLoading, hideLoading, showLoading} from "src/utils/loading";
@@ -220,7 +223,6 @@ export default {
         console.log({onSelectApplication: name})
         let app = ui.value.card_0.application
         ui.value.card_0.description = app.data[name].info.description
-
         ui.value.application.key = name
         ui.value.application.name = app.data[name].info.name
         ui.value.application.parameter = app.data[name].attr
@@ -228,7 +230,6 @@ export default {
         for (let item of ui.value.application.parameter) {
           data.value.form.websiteForm.application_config[item.name] = item.value
         }
-
 
       },
 
@@ -275,9 +276,7 @@ export default {
         websiteForm.index_root = ''
       }
 
-      websiteForm.ssl_enable = ui.value.card_1.sslToggle
-
-
+      websiteForm.ssl_enable = false
       let databaseForm = data.value.form.dataBaseForm
 
       databaseForm.name = 'DB_' + websiteForm.name
@@ -286,6 +285,23 @@ export default {
 
 
     })
+
+    function requestVerifyDomainRecords(value, evt) {
+      if (value) {
+        showLoading($q)
+        verifyDomainRecords(data.value.form.websiteForm.domain).then(res => {
+          ui.value.card_1.sslToggle = res.result.result_text === "SUCCESS"
+          if (!ui.value.card_1.sslToggle) {
+            $q.dialog({title: 'Enable SSL', message: '该域名未解析到后端主机', color: 'dark'})
+          }
+        }).finally(() => {
+          hideLoading($q)
+        })
+      } else {
+        ui.value.card_1.sslToggle = value
+      }
+
+    }
 
     function commitFormData() {
       console.log(toRaw(data.value.form))
@@ -301,6 +317,9 @@ export default {
           console.log({'dbRes': dbRes})
           await createDataBaseInstance(dbRes.id)
         }
+        if (ui.value.card_1.sslToggle) {
+          await enableWebsiteSSL(websiteId)
+        }
       }).catch(err => {
         errorLoading($q, err)
       }).finally(() => {
@@ -309,7 +328,7 @@ export default {
     }
 
     return {
-      ui, data, Public, index_root, commitFormData
+      ui, data, Public, index_root, commitFormData, requestVerifyDomainRecords
     }
   }
 }

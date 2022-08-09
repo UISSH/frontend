@@ -6,6 +6,30 @@ const api = {
 
 }
 
+export function disableWebsiteSSL(pk) {
+  return request({
+    url: `${api.website}/${pk}/disable_ssl/`,
+    method: 'post'
+
+  })
+}
+
+export function enableWebsiteSSL(pk) {
+  return request({
+    url: `${api.website}/${pk}/enable_ssl/`,
+    method: 'post'
+  })
+
+}
+
+export function verifyDomainRecords(domain) {
+  return request({
+    url: `${api.website}/verify_dns_records/`,
+    params: {
+      'domain': domain
+    }
+  })
+}
 
 export function listApplication() {
   return request({

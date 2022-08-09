@@ -5,7 +5,6 @@ const api = {
 
 }
 
-
 export function getFileText(absPath) {
   return request({
     url: `${api.fileBrowser}/file_text_operating/`,
