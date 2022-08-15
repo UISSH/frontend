@@ -101,6 +101,18 @@ const linksList = [
     },
 
   },
+  {
+    title: 'Terminal',
+    caption: 'Terminal',
+    icon: 'o_terminal',
+    route: {
+      name: 'terminal',
+      params: {
+        'directory': '/'
+      }
+    },
+
+  },
   // {
   //   title: 'Backup',
   //   caption: 'DNS management',

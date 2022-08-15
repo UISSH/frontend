@@ -41,6 +41,10 @@ const routes = [
       {
         path: "fileBrowser/:directory", name: 'fileBrowser', component: () => import('pages/FileBrowserPage/FileBrowser.vue')
       },
+
+      {
+        path: "terminal", name: 'terminal', component: () => import('pages/TerminalPage/TerminalIndex.vue')
+      },
       {
         path: "plainTextEditing/:path",
         name: 'plainTextEditing',

@@ -1,10 +1,12 @@
 <template>
   <q-page class="bg-blue-grey-1">
-    <div class="flex justify-center q-gutter-sm q-pa-md ">
-      <q-input dense color="blue-grey" label="host" v-model="auth.hostname"></q-input>
-      <q-input dense color="blue-grey" label="username" v-model="auth.username"></q-input>
-      <q-input dense color="blue-grey" label="password" type="password" v-model="auth.password"></q-input>
-      <q-btn label="connect" flat @click="initTerminal"></q-btn>
+    <div class="flex justify-between q-gutter-sm q-pa-sm bg-blue-grey-2 ">
+      <div class="flex q-gutter-md q-ml-md">
+        <q-input dense color="blue-grey" label="host" v-model="auth.hostname"></q-input>
+        <q-input dense color="blue-grey" label="username" v-model="auth.username"></q-input>
+        <q-input dense color="blue-grey" label="password" type="password" v-model="auth.password"></q-input>
+      </div>
+      <q-btn label="login" icon="o_play_circle_outline" flat @click="initTerminal"></q-btn>
     </div>
 
     <div class="flex flex-center q-mt-md">
