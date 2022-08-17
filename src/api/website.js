@@ -6,6 +6,24 @@ const api = {
 
 }
 
+export function updateWebDomainConfig(pk,data){
+  return request({
+    url: `${api.website}/${pk}/update_domain/`,
+    method: 'post',
+    data: data
+  })
+}
+
+export function updateWebConfig(pk, web_server_config) {
+  return request({
+    url: `${api.website}/${pk}/update_web_config/`,
+    method: 'post',
+    data: {
+      'web_server_config': web_server_config
+    }
+  })
+}
+
 export function disableWebsiteSSL(pk) {
   return request({
     url: `${api.website}/${pk}/disable_ssl/`,
@@ -82,6 +100,7 @@ export function patchWebsite(instance, data) {
     data: data
   })
 }
+
 
 export function createWebsite(data) {
   return request({

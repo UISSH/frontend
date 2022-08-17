@@ -36,7 +36,7 @@ import 'ace-builds/src-noconflict/theme-dracula';
 import workerJsonUrl from 'file-loader?esModule=false!ace-builds/src-noconflict/worker-json.js';
 
 import {onMounted, onUnmounted, ref} from "vue";
-import {patchWebsite} from "src/api/website";
+import {patchWebsite, updateWebConfig} from "src/api/website";
 import {errorLoading, hideLoading, showLoading} from "src/utils/loading";
 import {useQuasar} from "quasar";
 import ace from "ace-builds";
@@ -70,7 +70,6 @@ export default {
         msg: 'Oops...'
       },
       aceOption: {
-        fontSize: '18px',
         useWorker: true,
         wrap: true
       }
@@ -84,16 +83,18 @@ export default {
     })
 
     function requestPatchWebsite() {
+      let _old = content.value
       showLoading($q)
 
-      patchWebsite(props.pk, {"id": props.pk, 'valid_web_server_config': content.value}).then(res => {
-        content.value = res.valid_web_server_config
+      updateWebConfig(props.pk, content.value).then(res => {
+        content.value = res.web_server_config
       }).catch(err => {
         errorLoading($q, err)
         console.log(err.response.status)
         if (err.response.status === 400) {
-          ui.value.errMsg.msg = err.response.data.valid_web_server_config
+          ui.value.errMsg.msg = err.response.data.web_server_config
           ui.value.errMsg.show = true
+          content.value = _old
         }
       }).finally(() => {
         hideLoading($q)

@@ -20,9 +20,9 @@
     </q-tabs>
     <q-separator/>
     <q-tab-panels v-model="tab" animated>
-      <q-tab-panel class="q-gutter-md" name="basic">
+      <q-tab-panel class="q-gutter-md bg-grey-2" name="basic">
 
-        <div>
+        <div class="bg-white q-pa-md rounded-borders">
           <div class="text-body1 text-capitalize"> name</div>
           <div class="q-gutter-sm">
             <q-input v-model="data.website.name" color="dark" dense label="name"></q-input>
@@ -31,9 +31,9 @@
           </div>
         </div>
 
-        <div>
+        <div class="bg-white q-pa-md rounded-borders">
           <div class="text-body1 text-capitalize"> domain settings</div>
-          <div class="q-gutter-md">
+          <div class="q-gutter-md text-right">
             <q-input v-model="data.website.domain" color="dark" dense label="domain"></q-input>
             <q-input v-model="data.website.extra_domain"
                      color="dark"
@@ -41,10 +41,11 @@
                      hint="If you modify this, re-enable the SSL configuration to apply for the certificate."
                      label="extra domain"
                      outlined type="textarea"></q-input>
+            <q-btn icon="done" flat color="primary" @click="requestUpdateWebsiteDomain"></q-btn>
           </div>
         </div>
 
-        <div>
+        <div class="bg-white q-pa-md rounded-borders">
           <div class="text-body1 text-capitalize"> path</div>
           <div class="q-gutter-sm">
             <q-input v-model="data.website.index_root"
@@ -57,9 +58,7 @@
 
           </div>
         </div>
-        <div class="flex flex-center">
-          <q-btn color="primary" label="ok" @click="requestPatchWebsite"></q-btn>
-        </div>
+
       </q-tab-panel>
       <q-tab-panel class="shadow-0 q-pa-none" name="config">
         <web-server-config :data="data.website.valid_web_server_config" :pk="data.website.id"></web-server-config>
@@ -191,7 +190,7 @@
 <script>
 import {onMounted, ref} from "vue";
 import WebServerConfig from "components/website/WebServerConfig";
-import {getWebsite, getWebsiteCertificate, patchWebsite} from "src/api/website";
+import {getWebsite, getWebsiteCertificate, patchWebsite, updateWebDomainConfig} from "src/api/website";
 import {errorLoading, hideLoading, showLoading} from "src/utils/loading";
 import {date, useQuasar} from "quasar";
 
@@ -216,15 +215,20 @@ export default {
       requestWebsite()
     })
 
-    function requestPatchWebsite() {
+
+    function requestUpdateWebsiteDomain() {
       showLoading($q)
-      patchWebsite(props.website_id, data.value.website).then(res => {
-        console.log(res)
-        data.value.website = res
+      updateWebDomainConfig(props.website_id, {
+        'domain': data.value.website.domain,
+        'extra_domain': data.value.website.extra_domain
+      }).then(res => {
+        requestWebsite()
       }).catch(err => {
         errorLoading($q, err)
+
       }).finally(() => {
         hideLoading($q)
+
       })
     }
 
@@ -243,7 +247,7 @@ export default {
     }
 
     return {
-      tab: ref('basic'), data, date, requestPatchWebsite
+      tab: ref('basic'), data, date, requestUpdateWebsiteDomain
     }
   }
 }

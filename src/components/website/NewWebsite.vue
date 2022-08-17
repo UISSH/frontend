@@ -134,6 +134,7 @@ import {generateDBPassword} from "src/utils/generate";
 import {errorLoading, hideLoading, showLoading} from "src/utils/loading";
 import {useQuasar} from "quasar";
 import {createDataBaseInstance, createNewDatabase} from "src/api/database";
+import {createApplicationInstance} from "src/api/application";
 
 
 const _ui = {
@@ -303,9 +304,14 @@ export default {
 
     }
 
+    async function requestCreateDatabase(data) {
+      let dbRes = await createNewDatabase(data)
+      console.log({'dbRes': dbRes})
+      await createDataBaseInstance(dbRes.id)
+    }
+
     function commitFormData() {
       console.log(toRaw(data.value.form))
-
       showLoading($q)
       createWebsite(data.value.form.websiteForm).then(async res => {
         console.log({"createWebsite": res})
@@ -313,10 +319,12 @@ export default {
         let database = toRaw(data.value.form.dataBaseForm)
         database["website"] = websiteId
         if (ui.value.card_1.createDatabaseToggle) {
-          let dbRes = await createNewDatabase(database)
-          console.log({'dbRes': dbRes})
-          await createDataBaseInstance(dbRes.id)
+          await requestCreateDatabase(database)
         }
+
+        res = await createApplicationInstance(websiteId)
+        console.log({"createApplicationInstance": res})
+
         if (ui.value.card_1.sslToggle) {
           await enableWebsiteSSL(websiteId)
         }

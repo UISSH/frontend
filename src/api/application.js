@@ -10,3 +10,11 @@ export function doApplication(website_id, action) {
     url: `${api.database}/${website_id}/app_${action}/`
   })
 }
+
+export function createApplicationInstance(website_id) {
+  return request({
+    method: 'post',
+    url: `${api.database}/${website_id}/app_create/`
+  })
+
+}
