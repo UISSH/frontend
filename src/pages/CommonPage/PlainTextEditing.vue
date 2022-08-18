@@ -91,7 +91,6 @@ export default {
         msg: 'Oops...'
       },
       aceOption: {
-        fontSize: '18px',
         useWorker: true,
         wrap:true
       }

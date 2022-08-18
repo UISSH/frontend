@@ -1,5 +1,5 @@
 <template>
-  <q-page class="bg-blue-grey-1">
+  <q-page>
     <div class="flex justify-between q-gutter-sm q-pa-sm bg-blue-grey-2 ">
       <div class="flex q-gutter-md q-ml-md">
         <q-input dense color="blue-grey" label="host" v-model="auth.hostname"></q-input>
@@ -9,8 +9,8 @@
       <q-btn label="login" icon="o_play_circle_outline" flat @click="initTerminal"></q-btn>
     </div>
 
-    <div class="flex flex-center q-mt-md">
-      <div class="xterm" id="terminal"></div>
+    <div class="flex flex-center " style="width: calc(100vw - 320px);height: calc(100vh - 120px)">
+      <div class="xterm " style="width:100%;height: 100%" id="terminal"></div>
     </div>
     <q-footer>
       <link href="/static/css/xterm.css" rel="stylesheet"/>
@@ -29,19 +29,31 @@ import {ACCESS_TOKEN} from "src/utils/mutation-types";
 import {Cookies} from "quasar";
 
 const term = new Terminal();
-term.loadAddon(new WebLinksAddon());
-term.loadAddon(new FitAddon());
+
 
 function init() {
   let element = document.getElementById('terminal')
+  let fitAddon = new FitAddon()
+  term.loadAddon(new WebLinksAddon());
+  term.loadAddon(fitAddon);
   term.open(element);
+  fitAddon.fit()
 
+  function resizeScreen() {
+    // console.log("size", size);
+    try {
+      fitAddon.fit();
+    } catch (e) {
+      console.log("e", e.message);
+    }
+  }
+
+  window.addEventListener("resize", resizeScreen)
 }
 
 export default {
   name: "DemoPage",
   setup() {
-
     const auth = ref({
       "hostname": "127.0.0.1",
       "port": "22",
@@ -51,9 +63,7 @@ export default {
       "private_key_password": "",
     })
     onMounted(() => {
-
       init()
-
     })
 
     function initTerminal() {
