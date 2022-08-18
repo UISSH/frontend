@@ -5,6 +5,13 @@
         <q-input dense color="blue-grey" label="host" v-model="auth.hostname"></q-input>
         <q-input dense color="blue-grey" label="username" v-model="auth.username"></q-input>
         <q-input dense color="blue-grey" label="password" type="password" v-model="auth.password"></q-input>
+        <q-file
+          v-model="keyFile"
+          label="key"
+          color="blue-grey"
+          @update:model-value="updatePrivateKey"
+          dense
+        />
       </div>
       <q-btn label="login" icon="o_play_circle_outline" flat @click="initTerminal"></q-btn>
     </div>
@@ -15,14 +22,13 @@
     <q-footer>
       <link href="/static/css/xterm.css" rel="stylesheet"/>
     </q-footer>
-
   </q-page>
 
 </template>
 
 <script>
 import {Terminal} from 'xterm';
-import {onMounted, ref} from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
 import {WebLinksAddon} from 'xterm-addon-web-links';
 import {FitAddon} from 'xterm-addon-fit';
 import {ACCESS_TOKEN} from "src/utils/mutation-types";
@@ -38,7 +44,6 @@ function init() {
   term.loadAddon(fitAddon);
   term.open(element);
   fitAddon.fit()
-
   function resizeScreen() {
     // console.log("size", size);
     try {
@@ -62,6 +67,7 @@ export default {
       "private_key": "",
       "private_key_password": "",
     })
+    const keyFile = ref(null)
     onMounted(() => {
       init()
     })
@@ -99,6 +105,8 @@ export default {
           }))
           term.clear()
 
+        }else{
+
         }
         term.write(data.message);
       };
@@ -113,7 +121,17 @@ export default {
       window.terminalSocket = terminalSocket;
     }
 
-    return {auth, initTerminal}
+    onUnmounted(() => {
+      term.dispose()
+    })
+
+    function updatePrivateKey(val) {
+      val.text().then(text => {
+        auth.value.private_key = text
+      })
+    }
+
+    return {auth, initTerminal, keyFile, updatePrivateKey}
   }
 }
 </script>
