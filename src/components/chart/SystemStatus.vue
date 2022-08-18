@@ -275,7 +275,7 @@ export default {
         console.log(e)
       }
       serverStatusSocket.onclose = function (e) {
-        console.log("连接被远程主机强制关闭")
+        console.log("The connection was forcibly closed by the remote host.")
       }
       serverStatusSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);

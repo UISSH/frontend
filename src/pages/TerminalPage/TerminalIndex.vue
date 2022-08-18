@@ -78,7 +78,7 @@ export default {
         terminalSocket.send(JSON.stringify(auth.value))
       }
       terminalSocket.onclose = function (e) {
-        term.writeln("连接被远程主机强制关闭")
+        term.writeln("The connection was forcibly closed by the remote host.")
       }
       terminalSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
