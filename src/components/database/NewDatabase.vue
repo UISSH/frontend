@@ -86,7 +86,7 @@ import {generateDBPassword} from "src/utils/generate";
 
 export default {
   name: "NewDatabase",
-  setup() {
+  setup(props,{emit}) {
 
     const data = ref({
       newDatabaseForm: {
@@ -107,6 +107,7 @@ export default {
           console.log(res)
           createDataBaseInstance(res.id).then(res => {
             ui.value.step = 'success'
+            emit("on-success")
           }).catch(err => {
             ui.value.step = 'failed'
             ui.value.errorMsg = JSON.stringify(err.response.data, null, 1)

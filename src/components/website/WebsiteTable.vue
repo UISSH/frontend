@@ -6,7 +6,7 @@
         <q-btn v-close-popup color="white" flat icon="close"></q-btn>
       </div>
       <div class="flex flex-center">
-        <NewWebsite></NewWebsite>
+        <NewWebsite @on-success="newWebsiteOnSuccess"></NewWebsite>
       </div>
 
     </div>
@@ -312,6 +312,11 @@ export default {
       })
     }
 
+    function newWebsiteOnSuccess() {
+      ui.value.NewWebsiteDialog.show = false
+      requestInstance()
+    }
+
     onMounted(() => {
       tableData.value.data = []
       nextTick(() => {
@@ -332,7 +337,7 @@ export default {
       requestDeleteWebsite,
       requestApplicationAction,
       toWebsiteSettings,
-      enterFolder, navDatabaseSettings
+      enterFolder, navDatabaseSettings, newWebsiteOnSuccess
     }
   }
 }

@@ -57,6 +57,13 @@ export function updateDatabase(pk, data) {
   })
 }
 
+export function deleteDatabase(pk) {
+  return request({
+    url: `${api.database}/${pk}/`,
+    method: "delete"
+  })
+}
+
 export function getDatabase(pk) {
   return request({
     url: `${api.database}/${pk}/`,

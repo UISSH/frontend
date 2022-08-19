@@ -50,78 +50,7 @@ use([
   UniversalTransition
 ]);
 
-const __option = {
 
-  tooltip: {
-    trigger: 'axis',
-    // formatter: (data) => {
-    //   console.log(data)
-    //   let IN = data[0]
-    //   let OUT = data[1]
-    //   let inLabel = IN.seriesName + " :" + humanStorageSize(IN.data[1]) + "/sec"
-    //   let outLabel = OUT.seriesName + ":" + humanStorageSize(OUT.data[1]) + "/sec"
-    //   return inLabel + '<br>' + outLabel
-    // },
-    valueFormatter: (val) => {
-      return humanStorageSize(val) + '/sec'
-    }
-  },
-  legend: {
-    data: ['IN', 'OUT']
-  },
-  grid: {
-    left: '3%',
-    right: '4%',
-    bottom: '3%',
-    containLabel: true
-  },
-
-  xAxis: {
-    type: 'time',
-    data: []
-  },
-  yAxis: {
-    type: 'value',
-    axisLabel: {
-      formatter: (val) => {
-        return `${humanStorageSize(val)}/sec`
-      }
-    }
-  },
-  series: [
-    {
-      name: 'IN',
-      type: 'line',
-      smooth: true,
-      circle: 'circle',
-      itemStyle: {color: '#52a9ff'},
-      areaStyle: {
-        color: new graphic.LinearGradient(0, 0, 0, 1, [{
-          offset: 0,
-          color: 'rgba(30, 144, 255,1)'
-        }, {offset: 1, color: 'rgba(30, 144, 255,.4)'}], false)
-
-      },
-      lineStyle: {width: 1, color: '#52a9ff'},
-      data: [[Date.now(),0]],
-    },
-    {
-      name: 'OUT',
-      type: 'line',
-      smooth: true,
-      circle: 'circle',
-      itemStyle: {color: '#f7b851'},
-      areaStyle: {
-        color: new graphic.LinearGradient(0, 0, 0, 1, [{
-          offset: 0,
-          color: 'rgba(255, 140, 0,1)'
-        }, {offset: 1, color: 'rgba(255, 140, 0,.4)'}], false)
-      },
-      lineStyle: {width: 1, color: '#f7b851'},
-      data: [[Date.now(),0]]
-    }
-  ]
-}
 
 
 export default {
@@ -133,6 +62,69 @@ export default {
     [THEME_KEY]: ""
   },
   setup() {
+    const __option = {
+      tooltip: {
+        trigger: 'axis',
+        valueFormatter: (val) => {
+          return humanStorageSize(val) + '/sec'
+        }
+      },
+      legend: {
+        data: ['IN', 'OUT']
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+
+      xAxis: {
+        type: 'time',
+        data: []
+      },
+      yAxis: {
+        type: 'value',
+        axisLabel: {
+          formatter: (val) => {
+            return `${humanStorageSize(val)}/sec`
+          }
+        }
+      },
+      series: [
+        {
+          name: 'IN',
+          type: 'line',
+          smooth: true,
+          circle: 'circle',
+          itemStyle: {color: '#52a9ff'},
+          areaStyle: {
+            color: new graphic.LinearGradient(0, 0, 0, 1, [{
+              offset: 0,
+              color: 'rgba(30, 144, 255,1)'
+            }, {offset: 1, color: 'rgba(30, 144, 255,.4)'}], false)
+
+          },
+          lineStyle: {width: 1, color: '#52a9ff'},
+          data: [[Date.now(),0]],
+        },
+        {
+          name: 'OUT',
+          type: 'line',
+          smooth: true,
+          circle: 'circle',
+          itemStyle: {color: '#f7b851'},
+          areaStyle: {
+            color: new graphic.LinearGradient(0, 0, 0, 1, [{
+              offset: 0,
+              color: 'rgba(255, 140, 0,1)'
+            }, {offset: 1, color: 'rgba(255, 140, 0,.4)'}], false)
+          },
+          lineStyle: {width: 1, color: '#f7b851'},
+          data: [[Date.now(),0]]
+        }
+      ]
+    }
     const interval = ref(2)
     let websocket = createWebsocket("server_status")
     const ui = ref(
@@ -198,6 +190,17 @@ export default {
     onMounted(() => {
       // let i = setInterval(Private._loadingNetChartData, 1000)
       // data.value.intervalID.push({id: i, mark: "_loadingNetChartData"})
+    })
+
+    onBeforeUnmount(()=>{
+      ui.value = {
+        option: __option,
+        interval: 120,
+        lasted: {
+          iBytes: null,
+          oBytes: null
+        }
+      }
     })
 
     return {

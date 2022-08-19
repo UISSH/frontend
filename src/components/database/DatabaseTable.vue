@@ -8,7 +8,7 @@
           <q-btn v-close-popup color="white" flat icon="close"></q-btn>
         </div>
         <div class="flex flex-center">
-          <new-database></new-database>
+          <new-database @on-success="newDataBaseOnSuccess"></new-database>
         </div>
       </div>
 
@@ -32,9 +32,9 @@
               <q-tooltip>open phpmyadmin</q-tooltip>
             </q-btn>
             <q-btn v-if="tableSelected.length===1" color="red" icon="o_remove"
-                   @click="ui.DatabaseDialog.show=true"></q-btn>
-            <q-btn v-if="tableSelected.length===1" color="blue-grey-2" icon="o_settings" text-color="dark"
-                   @click="ui.DatabaseDialog.show=true"></q-btn>
+                   @click="requestDeleteDatabase"></q-btn>
+            <!--            <q-btn v-if="tableSelected.length===1" color="blue-grey-2" icon="o_settings" text-color="dark"-->
+            <!--                   @click="ui.DatabaseDialog.show=true"></q-btn>-->
             <!--            <q-btn color="blue-grey-1" text-color="dark" icon="o_backup" @click="ui.DatabaseDialog.show=true"></q-btn>-->
             <!--            <q-btn color="blue-grey" icon="o_drive_file_move" @click="ui.DatabaseDialog.show=true"></q-btn>-->
           </div>
@@ -63,7 +63,7 @@
         </q-td>
       </template>
       <template v-slot:body-cell-username="props">
-        <q-td :props="props" >
+        <q-td :props="props">
           <div class="flex justify-end">
             <input-area :value="props.value" type="text"></input-area>
           </div>
@@ -82,7 +82,7 @@
                 PENDING = 0, "pending"
                 SUCCESS = 1, "success"
                 FAILED = 2, "failed"-->
-        <q-td :props="props" >
+        <q-td :props="props">
           <div v-if="props.row.create_status===1">
             <q-icon color="green" name="o_check_circle" size="24px">
               <q-tooltip>created in the system.</q-tooltip>
@@ -120,10 +120,12 @@
 <script>
 import {nextTick, onMounted, ref} from "vue";
 import {listResStruct} from "src/utils/struct";
-import {createDataBaseInstance, listDatabase} from "src/api/database";
+import {createDataBaseInstance, deleteDatabase, listDatabase} from "src/api/database";
 import InputArea from "components/base/InputArea";
 import NewDatabase from "components/database/NewDatabase";
 import {useRouter} from "vue-router";
+import {errorLoading, hideLoading, showLoading} from "src/utils/loading";
+import {useQuasar} from "quasar";
 
 
 export default {
@@ -131,6 +133,7 @@ export default {
   components: {InputArea, NewDatabase},
   setup(props, {emit}) {
     const router = useRouter()
+    const $q = useQuasar()
 
     function t(msg) {
 
@@ -211,6 +214,11 @@ export default {
       router.push({"name": "databaseSettings", params: {"id": id}})
     }
 
+    function newDataBaseOnSuccess() {
+      ui.value.DatabaseDialog.show = false
+      requestInstance()
+    }
+
 
     onMounted(() => {
       tableData.value.data = []
@@ -220,6 +228,18 @@ export default {
       })
 
     })
+
+    function requestDeleteDatabase() {
+      showLoading($q)
+      deleteDatabase(tableSelected.value[0].id).then(res => {
+        requestInstance()
+      }).catch(err => {
+        errorLoading($q, err)
+      }).finally(() => {
+        hideLoading($q)
+      })
+    }
+
     return {
       /* 导出这一行 */
       tableData,
@@ -231,7 +251,7 @@ export default {
       requestInstance,
       ui,
       requestCreateDatabaseInstance,
-      toDatabaseSettings
+      toDatabaseSettings, newDataBaseOnSuccess, requestDeleteDatabase
     }
   }
 }

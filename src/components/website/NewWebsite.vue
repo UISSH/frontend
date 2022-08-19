@@ -214,7 +214,7 @@ const _data = {
 
 export default {
   name: "NewWebsite",
-  setup() {
+  setup(props, {emit}) {
     const $q = useQuasar()
     const data = ref(_data)
 
@@ -293,7 +293,7 @@ export default {
         verifyDomainRecords(data.value.form.websiteForm.domain).then(res => {
           ui.value.card_1.sslToggle = res.result.result_text === "SUCCESS"
           if (!ui.value.card_1.sslToggle) {
-            $q.dialog({title: 'Enable SSL', message: '该域名未解析到后端主机', color: 'dark'})
+            $q.dialog({title: 'Enable SSL', message: 'The domain name does not resolve to the backend host.', color: 'dark'})
           }
         }).finally(() => {
           hideLoading($q)
@@ -328,6 +328,9 @@ export default {
         if (ui.value.card_1.sslToggle) {
           await enableWebsiteSSL(websiteId)
         }
+
+      emit("on-success")
+
       }).catch(err => {
         errorLoading($q, err)
       }).finally(() => {
