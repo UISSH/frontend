@@ -1,10 +1,9 @@
 <template>
-  <q-page class="q-pa-md q-gutter-md bg-blue-grey-1 ">
-
+  <q-page class="q-pa-md q-gutter-md bg-blue-grey-1">
     <SystemStatus></SystemStatus>
 
-    <q-card  class="shadow-0 ">
-      <q-card-section class="text-uppercase ">
+    <q-card class="shadow-0">
+      <q-card-section class="text-uppercase">
         {{ $t("charts") }}
       </q-card-section>
       <q-card-section>
@@ -12,58 +11,51 @@
       </q-card-section>
     </q-card>
   </q-page>
-
 </template>
 
 <script>
-import {onMounted, ref} from "vue";
-import {faker} from "@faker-js/faker";
+import { onMounted, ref } from "vue";
+import { faker } from "@faker-js/faker";
 import NetworkTrafficChart from "components/chart/NetworkTrafficChart";
 import SystemStatus from "components/chart/SystemStatus";
-
 
 const ui = ref({
   systemStatus: {
     cpu: {
-      total: 45
+      total: 45,
     },
     ram: {
-      total: 45
+      total: 45,
     },
     ens: {
-      total: 45
+      total: 45,
     },
-  }
-})
+  },
+});
 
-const Private = {}
+const Private = {};
 
 const Public = {
   getSystemStatusColor: (val) => {
     if (val < 33) {
-      return 'positive'
+      return "positive";
     } else if (val >= 33 && val < 66) {
-      return 'warning'
+      return "warning";
     } else {
-      return 'negative'
+      return "negative";
     }
-  }
-}
+  },
+};
 
-
-const data = ref({})
+const data = ref({});
 export default {
   name: "OverviewIndex",
-  components: {NetworkTrafficChart, SystemStatus},
+  components: { NetworkTrafficChart, SystemStatus },
   setup() {
-    onMounted(() => {
-
-    })
-    return {ui, data, Public}
-  }
-}
+    onMounted(() => {});
+    return { ui, data, Public };
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

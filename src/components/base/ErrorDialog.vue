@@ -1,25 +1,29 @@
 <template>
   <q-dialog>
-    <q-card class="apple-card card ">
-      <q-card-section class="q-pa-sm flex justify-between items-center content-center text-body1  bg-warning ">
-        <span class="text-capitalize"> {{ $t('oops') }}！</span>
+    <q-card class="apple-card card">
+      <q-card-section
+        class="q-pa-sm flex justify-between items-center content-center text-body1 bg-warning"
+      >
+        <span class="text-capitalize"> {{ $t("oops") }}！</span>
         <q-btn v-close-popup dense flat icon="close"></q-btn>
       </q-card-section>
       <q-card-section>
         <div class="text-body1 text-capitalize q-mb-md">
-          {{ $t('message') }} : {{ data.message }}
+          {{ $t("message") }} : {{ data.message }}
         </div>
 
-        <div v-if="data.code!==500">
-             <textarea v-model="data.response" class=" err_textarea" readonly rows="12">
-            </textarea>
+        <div v-if="data.code !== 500">
+          <textarea
+            v-model="data.response"
+            class="err_textarea"
+            readonly
+            rows="12"
+          >
+          </textarea>
         </div>
 
         <div class="q-pa-sm bg-blue-grey-1" v-else>
-
-          <div v-html="data.response.data ">
-
-          </div>
+          <div v-html="data.response.data"></div>
         </div>
       </q-card-section>
       <q-card-actions></q-card-actions>
@@ -28,50 +32,48 @@
 </template>
 
 <script>
-
-import {toRaw} from "vue";
+import { toRaw } from "vue";
 
 export default {
   name: "ErrorDialog",
   props: {
     err: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   setup(props) {
-
-    let response = ''
-    let code = 1
-    let err = toRaw(props.err)
-    console.info({"err":err})
-    if (props.err.hasOwnProperty('response') && props.err.response) {
-      code = err.response.status
+    let response = "";
+    let code = 1;
+    let err = toRaw(props.err);
+    console.info({ err: err });
+    if (props.err.hasOwnProperty("response") && props.err.response) {
+      code = err.response.status;
       if (code >= 500) {
-        response = err.response
+        response = err.response;
       } else {
-        response = JSON.stringify(err.response, null, 2)
+        response = JSON.stringify(err.response, null, 2);
       }
     } else if (err) {
-      response = JSON.stringify(err, null, 2)
+      response = JSON.stringify(err, null, 2);
     } else {
-      response = '{}'
+      response = "{}";
     }
 
     let data = {
-      'message': props.err.message,
-      'response': response,
-      'code': code
-    }
+      message: props.err.message,
+      response: response,
+      code: code,
+    };
     return {
-      props, data
-    }
-  }
-}
+      props,
+      data,
+    };
+  },
+};
 </script>
 
 <style scoped>
-
 .card {
   min-height: 100px;
   min-width: 300px;
@@ -99,5 +101,4 @@ export default {
   -moz-border-radius: 3px;
   border-radius: 3px;
 }
-
 </style>

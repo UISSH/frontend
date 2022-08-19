@@ -1,9 +1,25 @@
 <template>
   <q-page class="bg-blue-grey-1">
-    <div class="flex justify-center q-gutter-sm q-pa-md ">
-      <q-input dense color="blue-grey" label="host" v-model="auth.hostname"></q-input>
-      <q-input dense color="blue-grey" label="username" v-model="auth.username"></q-input>
-      <q-input dense color="blue-grey" label="password" type="password" v-model="auth.password"></q-input>
+    <div class="flex justify-center q-gutter-sm q-pa-md">
+      <q-input
+        dense
+        color="blue-grey"
+        label="host"
+        v-model="auth.hostname"
+      ></q-input>
+      <q-input
+        dense
+        color="blue-grey"
+        label="username"
+        v-model="auth.username"
+      ></q-input>
+      <q-input
+        dense
+        color="blue-grey"
+        label="password"
+        type="password"
+        v-model="auth.password"
+      ></q-input>
       <q-btn label="connect" flat @click="initTerminal"></q-btn>
     </div>
 
@@ -11,108 +27,102 @@
       <div class="xterm" id="terminal"></div>
     </div>
     <q-footer>
-      <link href="/static/css/xterm.css" rel="stylesheet"/>
+      <link href="/static/css/xterm.css" rel="stylesheet" />
     </q-footer>
-
   </q-page>
-
 </template>
 
 <script>
-import {Terminal} from 'xterm';
-import {onMounted, ref} from "vue";
-import {WebLinksAddon} from 'xterm-addon-web-links';
-import {FitAddon} from 'xterm-addon-fit';
-import {ACCESS_TOKEN} from "src/utils/mutation-types";
-import {Cookies} from "quasar";
+import { Terminal } from "xterm";
+import { onMounted, ref } from "vue";
+import { WebLinksAddon } from "xterm-addon-web-links";
+import { FitAddon } from "xterm-addon-fit";
+import { ACCESS_TOKEN } from "src/utils/mutation-types";
+import { Cookies } from "quasar";
 
 const term = new Terminal();
 term.loadAddon(new WebLinksAddon());
 term.loadAddon(new FitAddon());
 
 function init() {
-  let element = document.getElementById('terminal')
+  let element = document.getElementById("terminal");
   term.open(element);
-
 }
 
 export default {
   name: "DemoPage",
   setup() {
-
     const auth = ref({
-      "hostname": "127.0.0.1",
-      "port": "22",
-      "username": "root",
-      "password": "",
-      "private_key": "",
-      "private_key_password": "",
-    })
+      hostname: "127.0.0.1",
+      port: "22",
+      username: "root",
+      password: "",
+      private_key: "",
+      private_key_password: "",
+    });
     onMounted(() => {
-
-      init()
-
-    })
+      init();
+    });
 
     function initTerminal() {
-
-      if (window.hasOwnProperty('terminalSocket')) {
-        window.terminalSocket.close()
+      if (window.hasOwnProperty("terminalSocket")) {
+        window.terminalSocket.close();
       }
 
-      term.writeln('try connecting remote server...')
-      let url = window.localStorage.getItem("api_url").replace("http", "ws")
-        + '/ws/terminal/?token='
-        + Cookies.get(ACCESS_TOKEN)
+      term.writeln("try connecting remote server...");
+      let url =
+        window.localStorage.getItem("api_url").replace("http", "ws") +
+        "/ws/terminal/?token=" +
+        Cookies.get(ACCESS_TOKEN);
 
       const terminalSocket = new WebSocket(url);
 
-      terminalSocket.addEventListener('error', function (event) {
-        console.log('WebSocket error: ', event);
-        term.writeln("无法建立 WebSocket 连接。")
+      terminalSocket.addEventListener("error", function (event) {
+        console.log("WebSocket error: ", event);
+        term.writeln("无法建立 WebSocket 连接。");
       });
       terminalSocket.onopen = function (e) {
-        console.log(e)
-        terminalSocket.send(JSON.stringify(auth.value))
-      }
+        console.log(e);
+        terminalSocket.send(JSON.stringify(auth.value));
+      };
       terminalSocket.onclose = function (e) {
-        term.writeln("The connection was forcibly closed by the remote host.")
-      }
+        term.writeln("The connection was forcibly closed by the remote host.");
+      };
       terminalSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
-        console.log(data)
+        console.log(data);
         if (data.code === 201) {
-          terminalSocket.send(JSON.stringify({
-            'message': ''
-          }))
-          term.clear()
-
+          terminalSocket.send(
+            JSON.stringify({
+              message: "",
+            })
+          );
+          term.clear();
         }
         term.write(data.message);
       };
       //获取从ssh通道获取的outdata
 
       //输入shelldata并发送到后台
-      term.onData(data => {
-        terminalSocket.send(JSON.stringify({
-          'message': data
-        }));
-      })
+      term.onData((data) => {
+        terminalSocket.send(
+          JSON.stringify({
+            message: data,
+          })
+        );
+      });
       window.terminalSocket = terminalSocket;
     }
 
-    return {auth, initTerminal}
-  }
-}
+    return { auth, initTerminal };
+  },
+};
 </script>
 
 <style scoped>
-
 .card-size {
   padding: 16px;
   min-height: 360px;
   min-width: 360px;
 }
-
-
 </style>

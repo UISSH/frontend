@@ -1,89 +1,84 @@
-import request from '../utils/request'
+import request from "../utils/request";
 //http://35.78.82.158:8000/api/FileBrowser/query/?directory=/var/db_backups/test1_ODmDSSx
 const api = {
   fileBrowser: "/api/FileBrowser",
-
-}
+};
 
 export function getFileText(absPath) {
   return request({
     url: `${api.fileBrowser}/file_text_operating/`,
     params: {
-      'abs_path': absPath
-    }
-  })
+      abs_path: absPath,
+    },
+  });
 }
 
 export function updateFileText(absPath, text) {
   return request({
     url: `${api.fileBrowser}/file_text_operating/`,
     params: {
-      'abs_path': absPath
+      abs_path: absPath,
     },
-    method: 'post',
+    method: "post",
     data: {
-      'path': absPath,
-      'text': text
-    }
-  })
+      path: absPath,
+      text: text,
+    },
+  });
 }
 
 export function getUsers() {
   return request({
     url: `${api.fileBrowser}/get_users/`,
-
-  })
+  });
 }
 
 export function listDirectory(directory) {
   return request({
     url: `${api.fileBrowser}/query/`,
     params: {
-      "directory": directory
-    }
-  })
-
+      directory: directory,
+    },
+  });
 }
 
 export function executeCMD(data) {
   /*
-  * {current_directory:'',operation_command:''}
-  * */
+   * {current_directory:'',operation_command:''}
+   * */
   return request({
     url: `${api.fileBrowser}/cmd/`,
-    method: 'post',
-    data: data
-
-  })
+    method: "post",
+    data: data,
+  });
 }
 
 export async function requestDownloadFileToken(absPath) {
   return await request({
     url: `${api.fileBrowser}/request_download_file/`,
     params: {
-      "path": absPath
-    }
-  })
+      path: absPath,
+    },
+  });
 }
 
 export function downloadFile(absPath) {
-  requestDownloadFileToken(absPath).then(data => {
-    let _api = request.defaults.baseURL + `/api/FileBrowser/download_file/`
+  requestDownloadFileToken(absPath).then((data) => {
+    let _api = request.defaults.baseURL + `/api/FileBrowser/download_file/`;
     if (request.defaults.baseURL.endsWith("/")) {
-      _api = request.defaults.baseURL + `api/FileBrowser/download_file/`
+      _api = request.defaults.baseURL + `api/FileBrowser/download_file/`;
     }
     let url = request.getUri({
       url: _api,
       params: {
-        "path": absPath,
-        "token": data.msg
-      }
-    })
-    console.log(url)
+        path: absPath,
+        token: data.msg,
+      },
+    });
+    console.log(url);
 
-    window.location.href = url
-  })
-
+    window.location.href = url;
+  });
 }
 
 export function uploadFile(directory, file) {
@@ -92,12 +87,12 @@ export function uploadFile(directory, file) {
   return request({
     url: `${api.fileBrowser}/upload_file/`,
     params: {
-      "directory": directory
+      directory: directory,
     },
-    method: 'post',
+    method: "post",
     data: formData,
     headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  })
+      "Content-Type": "multipart/form-data",
+    },
+  });
 }

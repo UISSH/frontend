@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header class="bg-blue-grey " elevated>
+    <q-header class="bg-blue-grey" elevated>
       <q-toolbar>
         <q-btn
           aria-label="Menu"
@@ -11,14 +11,18 @@
           @click="toggleLeftDrawer"
         />
 
-
         <q-toolbar-title>
           <q-btn flat icon="arrow_back" @click="$router.back()"></q-btn>
-
         </q-toolbar-title>
 
-        <q-btn class="text-capitalize" flat href="https://github.com/UISSH/" no-caps target="_blank" type="a">alpha
-          v{{ pkJson.version }}
+        <q-btn
+          class="text-capitalize"
+          flat
+          href="https://github.com/UISSH/"
+          no-caps
+          target="_blank"
+          type="a"
+          >alpha v{{ pkJson.version }}
         </q-btn>
       </q-toolbar>
     </q-header>
@@ -30,40 +34,34 @@
       show-if-above
     >
       <q-list>
-        <q-item-label
-          header
-        >
-          Keep simple
-        </q-item-label>
+        <q-item-label header> Keep simple </q-item-label>
 
         <EssentialLink
           v-for="link in essentialLinks"
           :key="link.title"
           v-bind="link"
-
         />
       </q-list>
     </q-drawer>
     <q-page-container>
-      <router-view/>
+      <router-view />
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import {defineComponent, ref} from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
-import pkJson from '../../package.json'
+import { defineComponent, ref } from "vue";
+import EssentialLink from "components/EssentialLink.vue";
+import pkJson from "../../package.json";
 
 const linksList = [
   {
-    title: 'Overview',
-    caption: 'summary',
+    title: "Overview",
+    caption: "summary",
     route: {
-      name: 'overview'
+      name: "overview",
     },
-    icon: 'scatter_plot',
-
+    icon: "scatter_plot",
   },
   // {
   //   title: 'DNS',
@@ -72,46 +70,42 @@ const linksList = [
   //
   // },
   {
-    title: 'Website',
-    caption: 'Website',
+    title: "Website",
+    caption: "Website",
     route: {
-      name: 'website'
+      name: "website",
     },
-    icon: 'web',
-
+    icon: "web",
   },
   {
-    title: 'Database',
-    caption: 'database',
+    title: "Database",
+    caption: "database",
     route: {
-      name: 'database'
+      name: "database",
     },
-    icon: 'sym_o_database',
-
+    icon: "sym_o_database",
   },
   {
-    title: 'FileBrowser',
-    caption: 'FileBrowser',
-    icon: 'donut_small',
+    title: "FileBrowser",
+    caption: "FileBrowser",
+    icon: "donut_small",
     route: {
-      name: 'fileBrowser',
+      name: "fileBrowser",
       params: {
-        'directory': '/'
-      }
+        directory: "/",
+      },
     },
-
   },
   {
-    title: 'Terminal',
-    caption: 'Terminal',
-    icon: 'o_terminal',
+    title: "Terminal",
+    caption: "Terminal",
+    icon: "o_terminal",
     route: {
-      name: 'terminal',
+      name: "terminal",
       params: {
-        'directory': '/'
-      }
+        directory: "/",
+      },
     },
-
   },
   // {
   //   title: 'Backup',
@@ -123,28 +117,26 @@ const linksList = [
   //   caption: 'DNS management',
   //   icon: 'settings',
   // },
-
-
 ];
 
 export default defineComponent({
-  name: 'MainLayout',
+  name: "MainLayout",
 
   components: {
-    EssentialLink
+    EssentialLink,
   },
 
   setup() {
-    const leftDrawerOpen = ref(false)
+    const leftDrawerOpen = ref(false);
 
     return {
       essentialLinks: linksList,
       leftDrawerOpen,
       toggleLeftDrawer() {
-        leftDrawerOpen.value = !leftDrawerOpen.value
+        leftDrawerOpen.value = !leftDrawerOpen.value;
       },
-      pkJson
-    }
-  }
-})
+      pkJson,
+    };
+  },
+});
 </script>
