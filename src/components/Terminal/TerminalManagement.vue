@@ -107,7 +107,8 @@ export default {
 
     function updatePrivateKey(val) {
       val.text().then((text) => {
-        data.value.private_key = text;
+        console.log(text)
+        data.value.newSSH.private_key = text;
       });
     }
 
