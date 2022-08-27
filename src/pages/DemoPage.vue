@@ -1,122 +1,89 @@
 <template>
-  <q-page class="bg-blue-grey-1">
-    <div class="flex justify-center q-gutter-sm q-pa-md">
-      <q-input
+  <q-page class="bg-dark">
+    <q-card>
+      <q-tabs
+        v-model="tab"
         dense
-        color="blue-grey"
-        label="host"
-        v-model="auth.hostname"
-      ></q-input>
-      <q-input
-        dense
-        color="blue-grey"
-        label="username"
-        v-model="auth.username"
-      ></q-input>
-      <q-input
-        dense
-        color="blue-grey"
-        label="password"
-        type="password"
-        v-model="auth.password"
-      ></q-input>
-      <q-btn label="connect" flat @click="initTerminal"></q-btn>
-    </div>
+        class="bg-blue-grey-2"
+        inline-label
+        indicator-color="red"
+        align="left"
+        outside-arrows
+      >
 
-    <div class="flex flex-center q-mt-md">
-      <div class="xterm" id="terminal"></div>
-    </div>
+        <q-tab icon="home" name="home"></q-tab>
+        <q-tab v-for="item in activeTerminalIndex" :key="item" :name="item" no-caps
+               :label="sshInstance[item].name">
+          <q-btn @click.stop="closeTerminalTab(item)" class="q-ml-sm" flat dense icon="close"></q-btn>
+        </q-tab>
+      </q-tabs>
+      <q-tab-panels v-model="tab" keep-alive :keep-alive-include="activeTerminalIndex" animated>
+
+        <q-tab-panel v-for="item in activeTerminalIndex" :key="item"
+                     :name="item" style="height: calc(100vh -  40px)" class="bg-dark">
+          <terminal-instance v-model:title="sshInstance[item].name" :auth="sshInstance[item].auth"></terminal-instance>
+        </q-tab-panel>
+
+        <q-tab-panel class="bg-blue-grey-1 q-pa-none" style="height: calc(100vh -  40px)" name="home">
+          <terminal-management @openNewTerminalTab="openNewTerminalTab"></terminal-management>
+        </q-tab-panel>
+      </q-tab-panels>
+
+    </q-card>
     <q-footer>
-      <link href="/static/css/xterm.css" rel="stylesheet" />
+      <link href="/static/css/xterm.css" rel="stylesheet"/>
     </q-footer>
   </q-page>
 </template>
 
 <script>
-import { Terminal } from "xterm";
-import { onMounted, ref } from "vue";
-import { WebLinksAddon } from "xterm-addon-web-links";
-import { FitAddon } from "xterm-addon-fit";
-import { ACCESS_TOKEN } from "src/utils/mutation-types";
-import { Cookies } from "quasar";
 
-const term = new Terminal();
-term.loadAddon(new WebLinksAddon());
-term.loadAddon(new FitAddon());
+import {onBeforeUnmount, onMounted, ref, toRaw} from "vue";
+import TerminalInstance from "components/Terminal/TerminalInstance";
+import TerminalManagement from "components/Terminal/TerminalManagement";
+import {generateUUID4} from "src/utils/generate";
 
-function init() {
-  let element = document.getElementById("terminal");
-  term.open(element);
-}
 
 export default {
   name: "DemoPage",
+  components: {TerminalInstance, TerminalManagement},
   setup() {
-    const auth = ref({
-      hostname: "127.0.0.1",
-      port: "22",
-      username: "root",
-      password: "",
-      private_key: "",
-      private_key_password: "",
-    });
-    onMounted(() => {
-      init();
-    });
 
-    function initTerminal() {
-      if (window.hasOwnProperty("terminalSocket")) {
-        window.terminalSocket.close();
-      }
+    // {'name':'','auth':{]}
+    const sshInstance = ref({})
 
-      term.writeln("try connecting remote server...");
-      let url =
-        window.localStorage.getItem("api_url").replace("http", "ws") +
-        "/ws/terminal/?token=" +
-        Cookies.get(ACCESS_TOKEN);
+    const activeTerminalIndex = ref([])
 
-      const terminalSocket = new WebSocket(url);
+    const tab = ref('home')
 
-      terminalSocket.addEventListener("error", function (event) {
-        console.log("WebSocket error: ", event);
-        term.writeln("无法建立 WebSocket 连接。");
-      });
-      terminalSocket.onopen = function (e) {
-        console.log(e);
-        terminalSocket.send(JSON.stringify(auth.value));
-      };
-      terminalSocket.onclose = function (e) {
-        term.writeln("The connection was forcibly closed by the remote host.");
-      };
-      terminalSocket.onmessage = function (e) {
-        const data = JSON.parse(e.data);
-        console.log(data);
-        if (data.code === 201) {
-          terminalSocket.send(
-            JSON.stringify({
-              message: "",
-            })
-          );
-          term.clear();
-        }
-        term.write(data.message);
-      };
-      //获取从ssh通道获取的outdata
+    function openNewTerminalTab(data) {
+      let _key = generateUUID4()
+      console.log(_key)
+      sshInstance.value[_key] = data
+      activeTerminalIndex.value.push(_key)
+      tab.value = _key
 
-      //输入shelldata并发送到后台
-      term.onData((data) => {
-        terminalSocket.send(
-          JSON.stringify({
-            message: data,
-          })
-        );
-      });
-      window.terminalSocket = terminalSocket;
     }
 
-    return { auth, initTerminal };
-  },
-};
+    function closeTerminalTab(v) {
+      // delete v from activeTerminalIndex
+      activeTerminalIndex.value = activeTerminalIndex.value.filter((val => val !== v))
+      tab.value = 'home'
+    }
+
+
+    onMounted(() => {
+
+
+    })
+
+    onBeforeUnmount(() => {
+
+    })
+
+    return {tab, sshInstance, activeTerminalIndex, closeTerminalTab, openNewTerminalTab}
+  }
+}
 </script>
 
 <style scoped>

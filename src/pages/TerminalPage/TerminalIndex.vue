@@ -1,163 +1,89 @@
 <template>
-  <q-page>
-    <div class="flex justify-between q-gutter-sm q-pa-sm bg-blue-grey-2">
-      <div class="flex q-gutter-md q-ml-md">
-        <q-input
-          dense
-          color="blue-grey"
-          label="host"
-          v-model="auth.hostname"
-        ></q-input>
-        <q-input
-          dense
-          color="blue-grey"
-          label="username"
-          v-model="auth.username"
-        ></q-input>
-        <q-input
-          dense
-          color="blue-grey"
-          label="password"
-          type="password"
-          v-model="auth.password"
-        ></q-input>
-        <q-file
-          v-model="keyFile"
-          label="key"
-          color="blue-grey"
-          @update:model-value="updatePrivateKey"
-          dense
-        />
-      </div>
-      <q-btn
-        label="login"
-        icon="o_play_circle_outline"
-        flat
-        @click="initTerminal"
-      ></q-btn>
-    </div>
+  <q-page class="bg-dark">
+    <q-card>
+      <q-tabs
+        v-model="tab"
+        dense
+        class="bg-blue-grey-2"
+        inline-label
+        indicator-color="red"
+        align="left"
+        outside-arrows
+      >
 
-    <div
-      class="flex flex-center"
-      style="width: calc(100vw - 320px); height: calc(100vh - 120px)"
-    >
-      <div class="xterm" style="width: 100%; height: 100%" id="terminal"></div>
-    </div>
+        <q-tab icon="home" name="home"></q-tab>
+        <q-tab v-for="item in activeTerminalIndex" :key="item" :name="item" no-caps
+               :label="sshInstance[item].name">
+          <q-btn @click.stop="closeTerminalTab(item)" class="q-ml-sm" flat dense icon="close"></q-btn>
+        </q-tab>
+      </q-tabs>
+      <q-tab-panels v-model="tab" keep-alive :keep-alive-include="activeTerminalIndex" animated>
+
+        <q-tab-panel v-for="item in activeTerminalIndex" :key="item"
+                     :name="item" style="height: calc(100vh -  40px)" class="bg-dark">
+          <terminal-instance v-model:title="sshInstance[item].name" :auth="sshInstance[item].auth"></terminal-instance>
+        </q-tab-panel>
+
+        <q-tab-panel class="bg-blue-grey-1 q-pa-none" style="height: calc(100vh -  40px)" name="home">
+          <terminal-management @openNewTerminalTab="openNewTerminalTab"></terminal-management>
+        </q-tab-panel>
+      </q-tab-panels>
+
+    </q-card>
     <q-footer>
-      <link href="/static/css/xterm.css" rel="stylesheet" />
+      <link href="/static/css/xterm.css" rel="stylesheet"/>
     </q-footer>
   </q-page>
 </template>
 
 <script>
-import { Terminal } from "xterm";
-import { onMounted, onUnmounted, ref } from "vue";
-import { WebLinksAddon } from "xterm-addon-web-links";
-import { FitAddon } from "xterm-addon-fit";
-import { ACCESS_TOKEN } from "src/utils/mutation-types";
-import { Cookies } from "quasar";
 
-const term = new Terminal();
+import {onBeforeUnmount, onMounted, ref, toRaw} from "vue";
+import TerminalInstance from "components/Terminal/TerminalInstance";
+import TerminalManagement from "components/Terminal/TerminalManagement";
+import {generateUUID4} from "src/utils/generate";
 
-function init() {
-  let element = document.getElementById("terminal");
-  let fitAddon = new FitAddon();
-  term.loadAddon(new WebLinksAddon());
-  term.loadAddon(fitAddon);
-  term.open(element);
-  fitAddon.fit();
-  function resizeScreen() {
-    // console.log("size", size);
-    try {
-      fitAddon.fit();
-    } catch (e) {
-      console.log("e", e.message);
-    }
-  }
-
-  window.addEventListener("resize", resizeScreen);
-}
 
 export default {
   name: "DemoPage",
+  components: {TerminalInstance, TerminalManagement},
   setup() {
-    const auth = ref({
-      hostname: "127.0.0.1",
-      port: "22",
-      username: "root",
-      password: "",
-      private_key: "",
-      private_key_password: "",
-    });
-    const keyFile = ref(null);
+
+    // {'name':'','auth':{]}
+    const sshInstance = ref({})
+
+    const activeTerminalIndex = ref([])
+
+    const tab = ref('home')
+
+    function openNewTerminalTab(data) {
+      let _key = generateUUID4()
+      console.log(_key)
+      sshInstance.value[_key] = data
+      activeTerminalIndex.value.push(_key)
+      tab.value = _key
+
+    }
+
+    function closeTerminalTab(v) {
+      // delete v from activeTerminalIndex
+      activeTerminalIndex.value = activeTerminalIndex.value.filter((val => val !== v))
+      tab.value = 'home'
+    }
+
+
     onMounted(() => {
-      init();
-    });
 
-    function initTerminal() {
-      if (window.hasOwnProperty("terminalSocket")) {
-        window.terminalSocket.close();
-      }
 
-      term.writeln("try connecting remote server...");
-      let url =
-        window.localStorage.getItem("api_url").replace("http", "ws") +
-        "/ws/terminal/?token=" +
-        Cookies.get(ACCESS_TOKEN);
+    })
 
-      const terminalSocket = new WebSocket(url);
+    onBeforeUnmount(() => {
 
-      terminalSocket.addEventListener("error", function (event) {
-        console.log("WebSocket error: ", event);
-        term.writeln("无法建立 WebSocket 连接。");
-      });
-      terminalSocket.onopen = function (e) {
-        console.log(e);
-        terminalSocket.send(JSON.stringify(auth.value));
-      };
-      terminalSocket.onclose = function (e) {
-        term.writeln("The connection was forcibly closed by the remote host.");
-      };
-      terminalSocket.onmessage = function (e) {
-        const data = JSON.parse(e.data);
-        console.log(data);
-        if (data.code === 201) {
-          terminalSocket.send(
-            JSON.stringify({
-              message: "",
-            })
-          );
-          term.clear();
-        } else {
-        }
-        term.write(data.message);
-      };
-      //获取从ssh通道获取的outdata
+    })
 
-      //输入shelldata并发送到后台
-      term.onData((data) => {
-        terminalSocket.send(
-          JSON.stringify({
-            message: data,
-          })
-        );
-      });
-      window.terminalSocket = terminalSocket;
-    }
-
-    onUnmounted(() => {
-      term.dispose();
-    });
-
-    function updatePrivateKey(val) {
-      val.text().then((text) => {
-        auth.value.private_key = text;
-      });
-    }
-
-    return { auth, initTerminal, keyFile, updatePrivateKey };
-  },
-};
+    return {tab, sshInstance, activeTerminalIndex, closeTerminalTab, openNewTerminalTab}
+  }
+}
 </script>
 
 <style scoped>
