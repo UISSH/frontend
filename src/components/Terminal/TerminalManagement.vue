@@ -5,7 +5,7 @@
       <div class="flex justify-between">
         <div class="text-h6">Host</div>
         <q-btn-dropdown style="border-radius:16px" color="dark" text-color="" icon="add">
-          <q-card style="min-width: 300px">
+          <q-card style="min-width: 420px">
             <q-card-section class="bg-blue-grey-1 text-dark ">
               <div class="flex q-gutter-sm items-center">
                 <q-icon size="24px" name="o_terminal"></q-icon>
@@ -19,18 +19,19 @@
                 <q-input class="col-10" label="host" color="dark" v-model="data.newSSH.hostname"></q-input>
                 <q-input class="col-2" label="port" color="dark" v-model="data.newSSH.port"></q-input>
               </div>
+              <q-input
+                class="col-6" label="username" color="dark"
+                v-model="data.newSSH.username"></q-input>
               <div v-if="!data.newSSH.keyLogin" class="row">
+
                 <q-input
-                  spellcheck="false" class="col-6" label="username" color="dark"
-                  v-model="data.newSSH.username"></q-input>
-                <q-input
-                  class="col-6" label="password" type="password" color="dark"
+                  class="col-12" label="password" type="password" color="dark"
                   v-model="data.newSSH.password"></q-input>
               </div>
 
               <div v-if="data.newSSH.keyLogin" class="row">
-                <q-file class="col-6"
 
+                <q-file class="col-6"
                         v-model="data.newSSH.private_key_file"
                         label="key"
                         color="dark"
