@@ -1,6 +1,6 @@
 <template>
-  <q-page class="bg-dark">
-    <q-card>
+  <q-page>
+    <q-card class="no-border-radius shadow-0">
       <q-tabs
         v-model="tab"
         dense
@@ -20,11 +20,11 @@
       <q-tab-panels v-model="tab" keep-alive :keep-alive-include="activeTerminalIndex" animated>
 
         <q-tab-panel v-for="item in activeTerminalIndex" :key="item"
-                     :name="item" style="height: calc(100vh -  40px)" class="bg-dark">
+                     :name="item" style="height: calc(100vh -  90px)" class="bg-dark">
           <terminal-instance v-model:title="sshInstance[item].name" :auth="sshInstance[item].auth"></terminal-instance>
         </q-tab-panel>
 
-        <q-tab-panel class="bg-blue-grey-1 q-pa-none" style="height: calc(100vh -  40px)" name="home">
+        <q-tab-panel class="bg-blue-grey-1 q-pa-none " style="height: calc(100vh -  86px)" name="home">
           <terminal-management @openNewTerminalTab="openNewTerminalTab"></terminal-management>
         </q-tab-panel>
       </q-tab-panels>

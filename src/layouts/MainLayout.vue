@@ -16,14 +16,16 @@
         </q-toolbar-title>
 
         <q-btn
-          class="text-capitalize"
+          class="text-caption"
           flat
           href="https://github.com/UISSH/"
           no-caps
+          dense
           target="_blank"
           type="a"
           >alpha v{{ pkJson.version }}
         </q-btn>
+
       </q-toolbar>
     </q-header>
 
