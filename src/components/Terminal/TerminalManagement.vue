@@ -34,7 +34,7 @@
                         v-model="data.newSSH.private_key_file"
                         label="key"
                         color="dark"
-                        @update:model-value="data.newSSH.private_key"
+                        @update:model-value="updatePrivateKey"
 
                 />
                 <q-input class="col-6" label="key password" color="dark"
@@ -44,9 +44,11 @@
               <q-toggle color="dark" label="Enable Keys Login" v-model="data.newSSH.keyLogin"></q-toggle>
             </q-card-section>
             <q-card-actions class="justify-around">
-              <q-btn class="text-capitalize" label="connect" @click="connectSSH" icon="o_bolt" icon-right="" color="dark" no-caps/>
-              <q-btn  label="add" icon="o_add"  icon-right="" @click="addSSH" color="dark" />
-              <q-btn class="text-capitalize" label="cancel" v-close-popup no-caps color="dark"   icon-right="" icon="cancel"></q-btn>
+              <q-btn class="text-capitalize" label="connect" @click="connectSSH" icon="o_bolt" icon-right=""
+                     color="dark" no-caps/>
+              <q-btn label="add" icon="o_add" icon-right="" @click="addSSH" color="dark"/>
+              <q-btn class="text-capitalize" label="cancel" v-close-popup no-caps color="dark" icon-right=""
+                     icon="cancel"></q-btn>
             </q-card-actions>
           </q-card>
         </q-btn-dropdown>
@@ -102,6 +104,12 @@ export default {
       SSHClient: {}
     })
 
+    function updatePrivateKey(val) {
+      val.text().then((text) => {
+        data.value.private_key = text;
+      });
+    }
+
     function loadingSSHClient() {
       let res = window.localStorage.getItem("SSH_CLIENT")
       console.log(res)
@@ -119,11 +127,12 @@ export default {
 
     }
 
-    function clickSSHClient(name){
+    function clickSSHClient(name) {
       data.value.newSSH = data.value.SSHClient[name]
       connectSSH()
 
     }
+
     function addSSH() {
       let _data = data.value
       console.log(_data.newSSH)
@@ -160,7 +169,7 @@ export default {
     })
 
 
-    return {ui, data, connectSSH, addSSH, deleteSSH,clickSSHClient}
+    return {ui, data, connectSSH, addSSH, deleteSSH, clickSSHClient, updatePrivateKey}
   }
 }
 </script>
