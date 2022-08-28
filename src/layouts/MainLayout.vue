@@ -88,7 +88,7 @@ const linksList = [
     icon: "sym_o_database",
   },
   {
-    title: "FileBrowser",
+    title: "Files",
     caption: "FileBrowser",
     icon: "donut_small",
     route: {
