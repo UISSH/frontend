@@ -18,7 +18,7 @@
               @update:model-value="updateApiUrl"
             >
               <template v-slot:append>
-                <q-btn flat icon="done" @click="setApiUrl()">
+                <q-btn flat icon="done" @click="setApiUrl()"  @keydown.enter="setApiUrl()">
                   <q-tooltip> Click to take effect </q-tooltip>
                 </q-btn>
               </template>
@@ -28,12 +28,14 @@
                 v-model="data.loginForm.username"
                 color="blue-grey"
                 label="username"
+                @keydown.enter="onLogin"
               ></q-input>
               <q-input
                 v-model="data.loginForm.password"
                 color="blue-grey"
                 label="password"
                 type="password"
+                @keydown.enter="onLogin"
               ></q-input>
             </div>
           </q-card-section>
@@ -42,9 +44,10 @@
               :loading="ui.loginBtn.loading"
               color="blue"
               label="login"
+
               @click="onLogin"
             ></q-btn>
-            <q-btn color="grey" label="forget password"></q-btn>
+            <q-btn  color="grey" label="forget password"></q-btn>
           </q-card-actions>
         </q-card>
         <q-banner
