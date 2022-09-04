@@ -14,7 +14,7 @@
             </q-card-section>
 
             <q-card-section class="q-gutter-sm">
-              <q-input label="name" color="dark" v-model="data.newSSH.name"></q-input>
+              <q-input label="name" color="dark" v-model="data.newSSH.name" @update:model-value="log"></q-input>
               <div class="row">
                 <q-input class="col-10" label="host" color="dark" v-model="data.newSSH.hostname"></q-input>
                 <q-input class="col-2" label="port" color="dark" v-model="data.newSSH.port"></q-input>
@@ -57,7 +57,7 @@
 
       <q-separator class="q-mt-sm q-mb-sm"></q-separator>
       <div class="flex q-gutter-md">
-        <div v-for="i in Object.keys(data.SSHClient)" :key="i">
+        <div v-for="i in Object.keys(SSHClient)" :key="i">
           <q-btn-dropdown split color="blue-grey-1" text-color="dark" :label="i"
                           style="min-width: 300px" @click="clickSSHClient(i)">
             <q-list>
@@ -101,51 +101,49 @@ export default {
         private_key: '',
         private_key_password: ''
 
-      },
-      SSHClient: {}
+      }
     })
+
+
+    let SSHClient = ref({})
 
     function updatePrivateKey(val) {
       val.text().then((text) => {
-        console.log(text)
         data.value.newSSH.private_key = text;
       });
     }
 
     function loadingSSHClient() {
       let res = window.localStorage.getItem("SSH_CLIENT")
-      console.log(res)
+      console.log({"loadingSSHClient": JSON.parse(res)})
       if (res == null) {
-        data.value.SSHClient = {}
+        SSHClient.value = {}
       } else {
-        data.value.SSHClient = JSON.parse(res)
+        SSHClient.value = JSON.parse(res)
       }
-
-
     }
 
     function saveSSHClient() {
-      window.localStorage.setItem("SSH_CLIENT", JSON.stringify(data.value.SSHClient))
+      let _data = toRaw(SSHClient.value)
+      window.localStorage.setItem("SSH_CLIENT", JSON.stringify(_data))
 
     }
 
     function clickSSHClient(name) {
-      data.value.newSSH = data.value.SSHClient[name]
+      data.value.newSSH = SSHClient.value[name]
       connectSSH()
 
     }
 
     function addSSH() {
-      let _data = data.value
-      console.log(_data.newSSH)
-      _data.SSHClient[_data.newSSH.name] = _data.newSSH
-      console.log(_data.SSHClient)
+      let _data = JSON.stringify(toRaw(data.value.newSSH))
+      _data = JSON.parse(_data)
+      SSHClient.value[_data.name] = _data
       saveSSHClient()
     }
 
     function deleteSSH(name) {
-      let _data = data.value
-      delete _data.SSHClient[name]
+      delete SSHClient.value[name]
       saveSSHClient()
     }
 
@@ -170,8 +168,12 @@ export default {
       saveSSHClient()
     })
 
+    function log(){
+      console.log(data.value.newSSH)
+    }
 
-    return {ui, data, connectSSH, addSSH, deleteSSH, clickSSHClient, updatePrivateKey}
+
+    return {ui, data, connectSSH, addSSH, deleteSSH, clickSSHClient, updatePrivateKey,SSHClient,log}
   }
 }
 </script>
