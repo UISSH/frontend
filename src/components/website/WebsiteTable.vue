@@ -120,7 +120,7 @@
         @click="navDatabaseSettings(props.row.database_id)"
       >
         <div
-          class="flex justify-end items-center q-gutter-sm"
+          class="flex justify-end items-center q-gutter-sm no-wrap"
           style="cursor: pointer"
         >
           <div>{{ props.value }}</div>
