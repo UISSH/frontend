@@ -10,7 +10,9 @@ yarn
 npm install
 ```
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
+### Start the app in development mode
+
+hot-code reloading, error reporting, etc.
 
 ```bash
 quasar dev
@@ -20,7 +22,6 @@ quasar dev
 
 ```bash
 yarn lint
-
 ```
 
 ### Format the files
@@ -38,7 +39,14 @@ quasar build
 ### Build the app for Django
 
 ```bash
+# bash
 django=true quasar build
+```
+
+```powershell
+# powershell
+$env:django="true"
+quasar build
 ```
 
 ### Customize the configuration
