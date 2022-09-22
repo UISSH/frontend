@@ -23,7 +23,7 @@
           dense
           target="_blank"
           type="a"
-          >alpha v{{ pkJson.version }}
+          >v{{ pkJson.version }}
         </q-btn>
 
       </q-toolbar>
@@ -107,6 +107,15 @@ const linksList = [
       params: {
         directory: "/",
       },
+    },
+  },
+  {
+    title: "FTP",
+    caption: "File mount",
+    icon: "fas fa-hard-drive",
+    route: {
+      name: "ftpServer",
+
     },
   },
   // {

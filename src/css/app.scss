@@ -1,6 +1,16 @@
 // app global css in SCSS form
 
 // app global css in SCSS form
+
+
+
+.apple-card-shadow {
+  background: #fff !important;
+  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0, 0, 0.5, 1);
+}
+
+
 .apple-card,
 .apple-card-hover {
   border-radius: 18px;

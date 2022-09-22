@@ -12,7 +12,7 @@ import ftpSeverTable from "components/FTPServer/FtpSeverTable";
 
 const columns = [{name: "name", label: "名称", align: "left", field: "name"}];
 export default {
-  name: "yourName",
+  name: "FTPServerIndex",
   components: {ftpSeverTable},
   setup(props, {emit}) {
     const tableData = ref(listResStruct());

@@ -8,7 +8,7 @@ const routes = [
   {
     path: "/d",
     component: () => import("layouts/DebugLayout.vue"),
-    children: [{ path: "", component: () => import("pages/DemoPage.vue") }],
+    children: [{ name:'DemoPage',path: "", component: () => import("pages/DemoPage.vue") }],
   },
   {
     path: "/dev",
@@ -63,6 +63,11 @@ const routes = [
         path: "plainTextEditing/:path",
         name: "plainTextEditing",
         component: () => import("pages/CommonPage/PlainTextEditing.vue"),
+      },
+      {
+        path: "ftpServer",
+        name: "ftpServer",
+        component: () => import("pages/FTPServerPage/FTPServerIndex.vue"),
       },
     ],
   },
