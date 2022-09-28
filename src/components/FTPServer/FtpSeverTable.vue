@@ -41,13 +41,13 @@
 
         <div class="flex q-gutter-xs">
           <q-btn flat dense icon="o_add" @click="clickEditor(undefined)"></q-btn>
-          <q-btn flat dense icon="o_sync"  @click="requestSyncFtpServerAccount"
+          <q-btn flat dense icon="o_sync" @click="requestSyncFtpServerAccount"
                  :loading="ui.loading.requestSyncFtpServerAccount">
             <q-tooltip>sync account data to ftp server.</q-tooltip>
           </q-btn>
           <q-btn flat dense icon="o_power_settings_new" v-if="ui.status.run_status" @click="requestStopServer"
                  :loading="ui.loading.requestStopServer"
-                 ></q-btn>
+          ></q-btn>
           <q-btn v-else flat dense icon="o_play_circle" @click="requestStartServer"
                  :loading="ui.loading.requestStartServer"></q-btn>
           <q-btn flat dense icon="o_refresh" @click="requestInstance" :loading="ui.loading.requestInstance"></q-btn>
@@ -146,7 +146,7 @@ export default {
 
       },
       accountSetting: {
-          data: undefined
+        data: undefined
       }
     })
     const params = ref({
@@ -167,8 +167,13 @@ export default {
 
     function getFTPHost() {
       let host = window.localStorage.getItem("api_url");
-      host = host.split(":")[1]
-      return host
+      if (host.startsWith("/")) {
+        return window.location.host
+      } else {
+        host = host.split(":")[1]
+        return host
+      }
+
     }
 
     function requestInstall() {
@@ -182,7 +187,7 @@ export default {
 
     }
 
-    function clickEditor( data) {
+    function clickEditor(data) {
 
       ui.value.accountSetting.data = data
       ui.value.dialog.ftpAccountSettings = true
