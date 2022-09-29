@@ -18,12 +18,12 @@
         text-color="dark"
         @click="$router.back()"
       ></q-btn>
-      <q-tab label="Basic" name="basic" />
-      <q-tab label="Config" name="config" />
-      <q-tab label="Ssl" name="ssl" />
+      <q-tab label="Basic" name="basic"/>
+      <q-tab label="Config" name="config"/>
+      <q-tab label="Ssl" name="ssl"/>
       <!--          <q-tab  label="application" name="application"/>-->
     </q-tabs>
-    <q-separator />
+    <q-separator/>
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel class="q-gutter-md bg-grey-2" name="basic">
         <div class="bg-white q-pa-md rounded-borders">
@@ -106,7 +106,7 @@
         <div v-if="data.website.ssl_enable">
           <div v-if="data.certificate" class="q-gutter-sm">
             <q-banner class="bg-blue-grey-1 text-center" dense rounded
-              ><span class="text-body1 text-dark text-capitalize">issuer</span>
+            ><span class="text-body1 text-dark text-capitalize">issuer</span>
             </q-banner>
             <div class="flex no-wrap rounded-borders items-baseline">
               <div
@@ -151,7 +151,7 @@
               </div>
             </div>
             <q-banner class="bg-blue-grey-1 text-center" dense rounded
-              ><span class="text-body1 text-dark text-capitalize">issued</span>
+            ><span class="text-body1 text-dark text-capitalize">issued</span>
             </q-banner>
             <div class="flex no-wrap rounded-borders items-baseline">
               <div
@@ -211,7 +211,7 @@
             </div>
 
             <q-banner class="bg-blue-grey-1 text-center" dense rounded
-              ><span class="text-body1 text-dark text-capitalize">date</span>
+            ><span class="text-body1 text-dark text-capitalize">date</span>
             </q-banner>
             <div class="flex no-wrap rounded-borders items-baseline">
               <div
@@ -279,12 +279,12 @@
   </q-card>
 
   <q-card v-else>
-    <q-card-section> Loading ... </q-card-section>
+    <q-card-section> Loading ...</q-card-section>
   </q-card>
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
+import {onMounted, ref} from "vue";
 import WebServerConfig from "components/website/WebServerConfig";
 import {
   getWebsite,
@@ -292,12 +292,12 @@ import {
   patchWebsite,
   updateWebDomainConfig,
 } from "src/api/website";
-import { errorLoading, hideLoading, showLoading } from "src/utils/loading";
-import { date, useQuasar } from "quasar";
+import {errorLoading, hideLoading, showLoading} from "src/utils/loading";
+import {date, useQuasar} from "quasar";
 
 export default {
   name: "WebsiteSettings",
-  components: { WebServerConfig },
+  components: {WebServerConfig},
   props: {
     website_id: {
       type: Number,
@@ -341,7 +341,11 @@ export default {
           data.value.certificate = res;
         })
         .catch((err) => {
-          errorLoading($q, err);
+
+          if (err.response.status !== 404) {
+            errorLoading($q, err);
+          }
+
         })
         .finally(() => {
           hideLoading($q);
