@@ -8,12 +8,12 @@
 
 <script>
 import WebsiteSettings from "components/website/WebsiteSettings";
-import { useRoute } from "vue-router";
-import { onMounted, ref } from "vue";
+import {useRoute} from "vue-router";
+import {onMounted, ref} from "vue";
 
 export default {
   name: "WebsiteSettingsPage",
-  components: { WebsiteSettings },
+  components: {WebsiteSettings},
   setup() {
     let data = ref({
       website_id: null,

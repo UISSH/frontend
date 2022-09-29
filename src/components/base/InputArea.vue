@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
-import { copyToClipboard } from "quasar";
+import {ref} from "vue";
+import {copyToClipboard} from "quasar";
 
 export default {
   name: "InputArea",
@@ -54,7 +54,7 @@ export default {
       },
     };
 
-    return { ui, props, Public };
+    return {ui, props, Public};
   },
 };
 </script>

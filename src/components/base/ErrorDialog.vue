@@ -22,7 +22,7 @@
           </textarea>
         </div>
 
-        <div class="q-pa-sm bg-blue-grey-1" v-else>
+        <div v-else class="q-pa-sm bg-blue-grey-1">
           <div v-html="data.response.data"></div>
         </div>
       </q-card-section>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { toRaw } from "vue";
+import {toRaw} from "vue";
 
 export default {
   name: "ErrorDialog",
@@ -46,7 +46,7 @@ export default {
     let response = "";
     let code = 1;
     let err = toRaw(props.err);
-    console.info({ err: err });
+    console.info({err: err});
     if (props.err.hasOwnProperty("response") && props.err.response) {
       code = err.response.status;
       if (code >= 500) {

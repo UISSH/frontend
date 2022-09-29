@@ -1,7 +1,7 @@
 import axios from "axios";
 
-import { ACCESS_TOKEN } from "src/utils/mutation-types";
-import { Cookies } from "quasar";
+import {ACCESS_TOKEN} from "src/utils/mutation-types";
+import {Cookies} from "quasar";
 
 if (process.env.DEV) {
   console.log(`I'm on a development build`);
@@ -17,7 +17,7 @@ const errorHandler = (error) => {
     window.location.href = "/";
   }
 
-  console.log({ errerr: error });
+  console.log({errerr: error});
   return Promise.reject(error);
 };
 
@@ -27,7 +27,7 @@ let _request = () => {
     api = process.env.API;
     window.localStorage.setItem("api_url", api);
   }
-  console.debug({ "api address": api });
+  console.debug({"api address": api});
   let request = axios.create({
     baseURL: api,
     timeout: 10 * 60 * 1000,
@@ -57,4 +57,4 @@ let request = _request();
 
 export default request;
 
-export { request as axios };
+export {request as axios};

@@ -8,7 +8,7 @@ const routes = [
   {
     path: "/d",
     component: () => import("layouts/DebugLayout.vue"),
-    children: [{ name:'DemoPage',path: "", component: () => import("pages/DemoPage.vue") }],
+    children: [{name: 'DemoPage', path: "", component: () => import("pages/DemoPage.vue")}],
   },
   {
     path: "/dev",

@@ -23,7 +23,7 @@
               @update:model-value="onSearch"
             >
               <template v-slot:append>
-                <q-icon name="search" />
+                <q-icon name="search"/>
               </template>
             </q-input>
           </div>
@@ -46,13 +46,13 @@
   </div>
 </template>
 <script>
-import { nextTick, onMounted, ref } from "vue";
-import { listResStruct } from "src/utils/struct";
+import {nextTick, onMounted, ref} from "vue";
+import {listResStruct} from "src/utils/struct";
 
-const columns = [{ name: "name", label: "名称", align: "left", field: "name" }];
+const columns = [{name: "name", label: "名称", align: "left", field: "name"}];
 export default {
   name: "yourName",
-  setup(props, { emit }) {
+  setup(props, {emit}) {
     const tableData = ref(listResStruct());
     const params = ref({
       page: 1,
@@ -78,7 +78,8 @@ export default {
         .then((res) => {
           tableData.value = res;
         })
-        .catch((err) => {})
+        .catch((err) => {
+        })
         .finally(() => {
           nextTick(() => {
             tableData.value.pagination.loading = false;

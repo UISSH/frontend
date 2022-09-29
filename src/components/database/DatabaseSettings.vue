@@ -18,10 +18,10 @@
         text-color="dark"
         @click="$router.back()"
       ></q-btn>
-      <q-tab label="settings" name="settings" />
-      <q-tab label="backup" name="backup" />
+      <q-tab label="settings" name="settings"/>
+      <q-tab label="backup" name="backup"/>
     </q-tabs>
-    <q-separator />
+    <q-separator/>
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="settings">
         <q-card class="apple-card">
@@ -99,7 +99,7 @@
                 label="upload"
               >
                 <template v-slot:prepend>
-                  <q-icon name="cloud_upload" />
+                  <q-icon name="cloud_upload"/>
                 </template>
                 <template v-slot:after>
                   <q-btn
@@ -146,7 +146,7 @@
                       icon="o_edit_note"
                       @click="editFile(props.value)"
                     >
-                      <q-tooltip> Edit this file. </q-tooltip>
+                      <q-tooltip> Edit this file.</q-tooltip>
                     </q-btn>
                   </div>
                   <div>
@@ -183,17 +183,12 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
-import {
-  exportBackup,
-  getDatabase,
-  importBackup,
-  updateDatabase,
-} from "src/api/database";
-import { errorLoading, hideLoading, showLoading } from "src/utils/loading";
-import { date, format, openURL, useQuasar } from "quasar";
-import { downloadFile, listDirectory, uploadFile } from "src/api/filebrowser";
-import { useRouter } from "vue-router";
+import {onMounted, ref} from "vue";
+import {exportBackup, getDatabase, importBackup, updateDatabase,} from "src/api/database";
+import {errorLoading, hideLoading, showLoading} from "src/utils/loading";
+import {date, format, useQuasar} from "quasar";
+import {downloadFile, listDirectory, uploadFile} from "src/api/filebrowser";
+import {useRouter} from "vue-router";
 
 export default {
   name: "DataBaseSettings",
@@ -206,7 +201,7 @@ export default {
   },
   setup: function (props) {
     const columns = [
-      { name: "filename", label: "filename", align: "left", field: "filename" },
+      {name: "filename", label: "filename", align: "left", field: "filename"},
       {
         name: "size",
         label: "size",
@@ -214,9 +209,9 @@ export default {
         field: "size",
         format: (val) => format.humanStorageSize(val),
       },
-      { name: "path", label: "path", field: "path", align: "left" },
+      {name: "path", label: "path", field: "path", align: "left"},
 
-      { name: "action", label: "action", field: "path", align: "center" },
+      {name: "action", label: "action", field: "path", align: "center"},
       {
         name: "mtime",
         label: "mtime",
@@ -228,7 +223,7 @@ export default {
     // const tab = ref('backup')
     const $q = useQuasar();
     const tableData = ref([]);
-    const { humanStorageSize } = format;
+    const {humanStorageSize} = format;
     const ui = ref({
       database: {
         isPwd: true,
@@ -299,7 +294,8 @@ export default {
     function requestImportBackup(path) {
       showLoading($q);
       importBackup(ui.value.database.data.id, path)
-        .then((res) => {})
+        .then((res) => {
+        })
         .catch((err) => {
           errorLoading($q, err);
         })

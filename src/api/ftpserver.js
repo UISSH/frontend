@@ -35,7 +35,7 @@ export function patchAccount(pk, data) {
 
 export function postAccount(data) {
   return request({
-    url: api.ftpServer ,
+    url: api.ftpServer,
     method: 'post',
     data: data
   })

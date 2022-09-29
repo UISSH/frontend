@@ -64,9 +64,9 @@
               type="textarea"
             ></q-input>
             <q-btn
-              icon="done"
-              flat
               color="primary"
+              flat
+              icon="done"
               @click="requestUpdateWebsiteDomain"
             ></q-btn>
           </div>
@@ -88,8 +88,8 @@
                     name: 'fileBrowser',
                     params: { directory: data.website.index_root },
                   }"
-                  icon="o_open_in_new"
                   flat
+                  icon="o_open_in_new"
                 ></q-btn>
               </template>
             </q-input>
@@ -286,12 +286,7 @@
 <script>
 import {onMounted, ref} from "vue";
 import WebServerConfig from "components/website/WebServerConfig";
-import {
-  getWebsite,
-  getWebsiteCertificate,
-  patchWebsite,
-  updateWebDomainConfig,
-} from "src/api/website";
+import {getWebsite, getWebsiteCertificate, updateWebDomainConfig,} from "src/api/website";
 import {errorLoading, hideLoading, showLoading} from "src/utils/loading";
 import {date, useQuasar} from "quasar";
 

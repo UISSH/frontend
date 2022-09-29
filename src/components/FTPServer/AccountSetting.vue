@@ -2,14 +2,14 @@
   <q-card class="card-box shadow-0 ">
     <q-card-section class="bg-blue-grey text-white flex justify-between items-center">
       <div>FTP Server Account Settings</div>
-      <q-btn flat dense target="_blank" type="a" href="https://github.com/fclairamb/ftpserver#config-file"
-             icon="o_help_outline"></q-btn>
+      <q-btn dense flat href="https://github.com/fclairamb/ftpserver#config-file" icon="o_help_outline" target="_blank"
+             type="a"></q-btn>
 
     </q-card-section>
     <q-card-section>
       <q-item-label>FTP Account</q-item-label>
-      <q-input color="dark" v-model="postData.username" label="username"></q-input>
-      <q-input color="dark" v-model="postData.password" label="password"></q-input>
+      <q-input v-model="postData.username" color="dark" label="username"></q-input>
+      <q-input v-model="postData.password" color="dark" label="password"></q-input>
 
     </q-card-section>
 
@@ -18,21 +18,21 @@
         Drive Settings
       </q-item-label>
       <q-option-group
-        class="q-mt-sm"
         v-model="group"
         :options="options"
+        class="q-mt-sm"
         color="dark"
         inline
         @update:model-value="updateFileSystem"
       />
 
 
-      <q-input type="textarea" v-model="postData.params" color="dark" hint="json" label="params"/>
+      <q-input v-model="postData.params" color="dark" hint="json" label="params" type="textarea"/>
 
     </q-card-section>
-    <q-card-actions class="bg-white" align="right">
-      <q-btn label="cancel" flat icon="o_cancel" v-close-popup></q-btn>
-      <q-btn label="ok" flat icon="o_done" :loading="ui.loading.done" @click="done()"></q-btn>
+    <q-card-actions align="right" class="bg-white">
+      <q-btn v-close-popup flat icon="o_cancel" label="cancel"></q-btn>
+      <q-btn :loading="ui.loading.done" flat icon="o_done" label="ok" @click="done()"></q-btn>
     </q-card-actions>
   </q-card>
 

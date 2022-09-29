@@ -3,51 +3,54 @@
     <q-card class="no-border-radius shadow-0">
       <q-tabs
         v-model="tab"
-        dense
-        class="bg-blue-grey-2"
-        inline-label
-        indicator-color="red"
         align="left"
+        class="bg-blue-grey-2"
+        dense
+        indicator-color="red"
+        inline-label
         outside-arrows
       >
 
         <q-tab icon="home" name="home"></q-tab>
-        <q-tab v-for="item in activeTerminalIndex" :key="item" :name="item" no-caps
-               :label="instanceOfTerminalOpened[item].name">
-          <q-icon class="q-pa-sm q-ml-sm" size="16px" @click.stop="closeTerminalTab(item)" name="close"></q-icon>
+        <q-tab v-for="item in activeTerminalIndex" :key="item" :label="instanceOfTerminalOpened[item].name" :name="item"
+               no-caps>
+          <q-icon class="q-pa-sm q-ml-sm" name="close" size="16px" @click.stop="closeTerminalTab(item)"></q-icon>
         </q-tab>
       </q-tabs>
-      <q-tab-panels v-model="tab" keep-alive :keep-alive-include="activeTerminalIndex" animated>
 
-        <q-tab-panel class="bg-blue-grey-1 q-pa-none " style="height: calc(100vh -  86px)" name="home">
+
+      <q-tab-panels v-model="tab" :keep-alive-include="activeTerminalIndex" animated keep-alive>
+        <!--   Host   -->
+        <q-tab-panel class="bg-blue-grey-1 q-pa-none " name="home" style="height: calc(100vh -  86px)">
           <terminal-management @openNewTerminalTab="openNewTerminalTab"></terminal-management>
         </q-tab-panel>
 
+        <!--   Instance   -->
         <q-tab-panel v-for="uuidhex in activeTerminalIndex" :key="uuidhex"
                      :name="uuidhex" style="height: calc(100vh -  130px);width: 100%;background-color: #282a36">
-          <terminal-instance :uuid="uuidhex" v-model:title="instanceOfTerminalOpened[uuidhex].name"
-                             :auth="instanceOfTerminalOpened[uuidhex].auth"></terminal-instance>
+          <terminal-instance v-model:title="instanceOfTerminalOpened[uuidhex].name" :auth="instanceOfTerminalOpened[uuidhex].auth"
+                             :uuid="uuidhex"></terminal-instance>
         </q-tab-panel>
 
 
       </q-tab-panels>
 
     </q-card>
-    <q-footer  v-if="tab!=='home'">
+    <q-footer v-if="tab!=='home'">
       <div class="flex justify-between no-wrap">
         <q-btn-dropdown color="primary" icon="density_medium">
           <q-card>
             <q-card-section class="q-pl-sm ">
               <q-option-group
+                v-model="globalShell.selected"
                 :options="globalShell.options"
                 type="checkbox"
-                v-model="globalShell.selected"
               />
             </q-card-section>
 
           </q-card>
         </q-btn-dropdown>
-        <q-input style="width: 100%"  filled dense dark v-model="globalShell.command"
+        <q-input v-model="globalShell.command" dark dense filled style="width: 100%"
                  @keydown.enter="sendCommand"></q-input>
         <q-btn icon="send" @click="sendCommand" @keydown.enter="sendCommand"></q-btn>
       </div>
@@ -58,7 +61,7 @@
 
 <script>
 
-import {onBeforeUnmount, onMounted, ref, toRaw, watch} from "vue";
+import {onBeforeUnmount, onMounted, ref} from "vue";
 import TerminalInstance from "components/Terminal/TerminalInstance";
 import TerminalManagement from "components/Terminal/TerminalManagement";
 import {generateUUID4} from "src/utils/generate";
@@ -89,8 +92,8 @@ export default {
 
     function syncGlobalShellOptions() {
       globalShell.value.options = []
-      for(let uuidHex of activeTerminalIndex.value){
-         globalShell.value.options.push({"label": instanceOfTerminalOpened.value[uuidHex].name, "value": uuidHex})
+      for (let uuidHex of activeTerminalIndex.value) {
+        globalShell.value.options.push({"label": instanceOfTerminalOpened.value[uuidHex].name, "value": uuidHex})
 
       }
 

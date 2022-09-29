@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import {ref} from "vue";
 import DatabaseTable from "components/database/DatabaseTable";
 
 const ui = ref({});
@@ -13,9 +13,9 @@ const ui = ref({});
 const data = ref({});
 export default {
   name: "DatabaseIndex",
-  components: { DatabaseTable },
+  components: {DatabaseTable},
   setup() {
-    return { ui, data };
+    return {ui, data};
   },
 };
 </script>

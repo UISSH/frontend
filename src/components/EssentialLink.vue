@@ -1,7 +1,7 @@
 <template>
   <q-item v-if="route.hasOwnProperty('name')" :to="route">
     <q-item-section v-if="icon" avatar>
-      <q-icon :name="icon" />
+      <q-icon :name="icon"/>
     </q-item-section>
 
     <q-item-section>
@@ -12,7 +12,7 @@
 
   <q-item v-else :href="link" :to="route" clickable tag="a" target="_blank">
     <q-item-section v-if="icon" avatar>
-      <q-icon :name="icon" />
+      <q-icon :name="icon"/>
     </q-item-section>
 
     <q-item-section>
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import {defineComponent} from "vue";
 
 export default defineComponent({
   name: "EssentialLink",

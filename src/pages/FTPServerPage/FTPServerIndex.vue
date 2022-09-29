@@ -6,7 +6,7 @@
 
 <script>
 
-import {nextTick, onMounted, ref} from "vue";
+import {nextTick, ref} from "vue";
 import {listResStruct} from "src/utils/struct";
 import ftpSeverTable from "components/FTPServer/FtpSeverTable";
 

@@ -18,9 +18,9 @@
         v-model:value="content"
         :lang="props.lang"
         :options="ui.aceOption"
+        :print-margin="false"
         style="min-height: calc(100vh - 180px)"
         theme="dracula"
-        :print-margin="false"
         @change="configContentChanged"
       />
     </q-card-section>
@@ -36,23 +36,23 @@
 </template>
 
 <script>
-import { VAceEditor } from "vue3-ace-editor/index";
+import {VAceEditor} from "vue3-ace-editor/index";
 import "ace-builds/src-noconflict/mode-nginx";
 import "ace-builds/src-noconflict/theme-xcode";
 import "ace-builds/src-noconflict/theme-dracula";
 import workerJsonUrl from "file-loader?esModule=false!ace-builds/src-noconflict/worker-json.js";
 
-import { onMounted, onUnmounted, ref } from "vue";
-import { patchWebsite, updateWebConfig } from "src/api/website";
-import { errorLoading, hideLoading, showLoading } from "src/utils/loading";
-import { useQuasar } from "quasar";
+import {onMounted, onUnmounted, ref} from "vue";
+import {updateWebConfig} from "src/api/website";
+import {errorLoading, hideLoading, showLoading} from "src/utils/loading";
+import {useQuasar} from "quasar";
 import ace from "ace-builds";
 
 ace.config.setModuleUrl("ace/mode/json_worker", workerJsonUrl);
 
 export default {
   name: "WebServerConfig",
-  components: { VAceEditor },
+  components: {VAceEditor},
   props: {
     pk: {
       type: String,
@@ -114,7 +114,7 @@ export default {
       console.log(content.value);
     }
 
-    return { props, content, configContentChanged, ui, requestPatchWebsite };
+    return {props, content, configContentChanged, ui, requestPatchWebsite};
   },
 };
 </script>

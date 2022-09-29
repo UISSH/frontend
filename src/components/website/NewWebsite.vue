@@ -34,7 +34,7 @@
         <div class="q-pa-sm text-caption">{{ ui.card_0.description }}</div>
       </q-card-section>
 
-      <q-card-section class="flex q-gutter-md justify-end"> </q-card-section>
+      <q-card-section class="flex q-gutter-md justify-end"></q-card-section>
       <q-card-actions class="justify-end">
         <q-btn
           :disable="ui.card_0.application.model == null"
@@ -183,19 +183,14 @@
 </template>
 
 <script>
-import { onMounted, onUnmounted, ref, toRaw, watchEffect } from "vue";
-import {
-  createWebsite,
-  enableWebsiteSSL,
-  listApplication,
-  verifyDomainRecords,
-} from "src/api/website";
-import { userInfo } from "src/utils/struct";
-import { generateDBPassword } from "src/utils/generate";
-import { errorLoading, hideLoading, showLoading } from "src/utils/loading";
-import { useQuasar } from "quasar";
-import { createDataBaseInstance, createNewDatabase } from "src/api/database";
-import { createApplicationInstance } from "src/api/application";
+import {onMounted, onUnmounted, ref, toRaw, watchEffect} from "vue";
+import {createWebsite, enableWebsiteSSL, listApplication, verifyDomainRecords,} from "src/api/website";
+import {userInfo} from "src/utils/struct";
+import {generateDBPassword} from "src/utils/generate";
+import {errorLoading, hideLoading, showLoading} from "src/utils/loading";
+import {useQuasar} from "quasar";
+import {createDataBaseInstance, createNewDatabase} from "src/api/database";
+import {createApplicationInstance} from "src/api/application";
 
 const _ui = {
   card: 0,
@@ -206,7 +201,7 @@ const _ui = {
       {
         attr: {},
         name: "name",
-        label: { default: "title", "en-US": "title" },
+        label: {default: "title", "en-US": "title"},
         value: "new website!",
         required: true,
         description: {
@@ -217,7 +212,7 @@ const _ui = {
       {
         attr: {},
         name: "text",
-        label: { default: "text", "en-US": "text" },
+        label: {default: "text", "en-US": "text"},
         required: true,
         value: "与君初相识，犹如故人归。嗨，别来无恙！ <br> Hello World！",
         description: {
@@ -228,7 +223,7 @@ const _ui = {
       {
         attr: {},
         name: "email",
-        label: { default: "email", "en-US": "email" },
+        label: {default: "email", "en-US": "email"},
         value: null,
         required: false,
         description: {
@@ -283,13 +278,13 @@ const _data = {
 
 export default {
   name: "NewWebsite",
-  setup(props, { emit }) {
+  setup(props, {emit}) {
     const $q = useQuasar();
     const data = ref(_data);
 
     const Public = {
       onSelectApplication(name) {
-        console.log({ onSelectApplication: name });
+        console.log({onSelectApplication: name});
         let app = ui.value.card_0.application;
         ui.value.card_0.description = app.data[name].info.description;
         ui.value.application.key = name;
@@ -334,7 +329,8 @@ export default {
       Public.requestListApplication();
     });
 
-    onUnmounted(() => {});
+    onUnmounted(() => {
+    });
     let index_root = ref("");
 
     watchEffect(() => {
@@ -378,7 +374,7 @@ export default {
 
     async function requestCreateDatabase(data) {
       let dbRes = await createNewDatabase(data);
-      console.log({ dbRes: dbRes });
+      console.log({dbRes: dbRes});
       await createDataBaseInstance(dbRes.id);
     }
 
@@ -387,7 +383,7 @@ export default {
       showLoading($q);
       createWebsite(data.value.form.websiteForm)
         .then(async (res) => {
-          console.log({ createWebsite: res });
+          console.log({createWebsite: res});
           let websiteId = res.id;
           let database = toRaw(data.value.form.dataBaseForm);
           database["website"] = websiteId;
@@ -396,7 +392,7 @@ export default {
           }
 
           res = await createApplicationInstance(websiteId);
-          console.log({ createApplicationInstance: res });
+          console.log({createApplicationInstance: res});
 
           if (ui.value.card_1.sslToggle) {
             await enableWebsiteSSL(websiteId);

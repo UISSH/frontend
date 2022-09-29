@@ -73,20 +73,20 @@
 
       <q-card-section>
         <div class="text-red">Error</div>
-        <q-input v-model="ui.errorMsg" readonly type="textarea"> </q-input>
+        <q-input v-model="ui.errorMsg" readonly type="textarea"></q-input>
       </q-card-section>
     </div>
   </q-card>
 </template>
 
 <script>
-import { ref } from "vue";
-import { createDataBaseInstance, createNewDatabase } from "src/api/database";
-import { generateDBPassword } from "src/utils/generate";
+import {ref} from "vue";
+import {createDataBaseInstance, createNewDatabase} from "src/api/database";
+import {generateDBPassword} from "src/utils/generate";
 
 export default {
   name: "NewDatabase",
-  setup(props, { emit }) {
+  setup(props, {emit}) {
     const data = ref({
       newDatabaseForm: {
         name: null,
@@ -122,7 +122,7 @@ export default {
       },
     };
 
-    return { ui, data, Public };
+    return {ui, data, Public};
   },
 };
 </script>

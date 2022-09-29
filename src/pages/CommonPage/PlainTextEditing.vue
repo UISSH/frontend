@@ -12,7 +12,7 @@
                   <span class="text-caption">{{ data.type }}</span>
                 </div>
               </template>
-              <template v-slot:after> </template>
+              <template v-slot:after></template>
             </q-input>
           </div>
           <div class="col-2"></div>
@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { VAceEditor } from "vue3-ace-editor/index";
+import {VAceEditor} from "vue3-ace-editor/index";
 /*
 https://github.com/ajaxorg/ace-builds/blob/master/src-noconflict/ext-modelist.js
 */
@@ -68,20 +68,20 @@ import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-php";
 import "ace-builds/src-noconflict/theme-dracula";
 
-import { onMounted, onUnmounted, ref } from "vue";
-import { useQuasar } from "quasar";
-import { getFileText, updateFileText } from "src/api/filebrowser";
-import { errorLoading, hideLoading, showLoading } from "src/utils/loading";
-import { useRoute } from "vue-router";
+import {onMounted, onUnmounted, ref} from "vue";
+import {useQuasar} from "quasar";
+import {getFileText, updateFileText} from "src/api/filebrowser";
+import {errorLoading, hideLoading, showLoading} from "src/utils/loading";
+import {useRoute} from "vue-router";
 import ace from "ace-builds";
 import workerJsonUrl from "file-loader?esModule=false!ace-builds/src-noconflict/worker-json.js";
-import { detection } from "src/utils/detection-type";
+import {detection} from "src/utils/detection-type";
 
 ace.config.setModuleUrl("ace/mode/json_worker", workerJsonUrl);
 
 export default {
   name: "PlainTextEditing",
-  components: { VAceEditor },
+  components: {VAceEditor},
 
   setup() {
     const $q = useQuasar();
@@ -124,7 +124,8 @@ export default {
 
       showLoading($q);
       updateFileText(data.value.path, data.value.text)
-        .then((res) => {})
+        .then((res) => {
+        })
         .catch((err) => {
           errorLoading($q, err);
         })
@@ -157,7 +158,7 @@ export default {
       document.removeEventListener("keydown", saveContent, false);
     });
 
-    return { ui, data, requestUpdateFileText };
+    return {ui, data, requestUpdateFileText};
   },
 };
 </script>

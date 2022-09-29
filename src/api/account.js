@@ -1,6 +1,6 @@
 import request from "../utils/request";
-import { ACCESS_TOKEN, USER_INFO } from "src/utils/mutation-types";
-import { Cookies } from "quasar";
+import {ACCESS_TOKEN, USER_INFO} from "src/utils/mutation-types";
+import {Cookies} from "quasar";
 
 const api = {
   account: "/api/User",

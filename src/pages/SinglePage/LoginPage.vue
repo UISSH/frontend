@@ -18,8 +18,8 @@
               @update:model-value="updateApiUrl"
             >
               <template v-slot:append>
-                <q-btn flat icon="done" @click="setApiUrl()"  @keydown.enter="setApiUrl()">
-                  <q-tooltip> Click to take effect </q-tooltip>
+                <q-btn flat icon="done" @click="setApiUrl()" @keydown.enter="setApiUrl()">
+                  <q-tooltip> Click to take effect</q-tooltip>
                 </q-btn>
               </template>
             </q-input>
@@ -47,19 +47,19 @@
 
               @click="onLogin"
             ></q-btn>
-            <q-btn  color="grey" label="forget password"></q-btn>
+            <q-btn color="grey" label="forget password"></q-btn>
           </q-card-actions>
         </q-card>
         <q-banner
           v-if="showWarning()"
+          class="text-center bg-transparent"
           dense
           rounded
-          class="text-center bg-transparent"
         >
           <div style="opacity: 0.6">
-            <q-icon name="o_lock_open" size="18px" color="red"></q-icon>
+            <q-icon color="red" name="o_lock_open" size="18px"></q-icon>
             <span class="q-ml-sm text-red text-caption"
-              >Data is not encrypted during transmission.</span
+            >Data is not encrypted during transmission.</span
             >
           </div>
         </q-banner>
@@ -69,11 +69,11 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
-import { requestLogin } from "src/api/account";
-import { useRoute, useRouter } from "vue-router";
-import { errorLoading } from "src/utils/loading";
-import { useQuasar } from "quasar";
+import {onMounted, ref} from "vue";
+import {requestLogin} from "src/api/account";
+import {useRoute, useRouter} from "vue-router";
+import {errorLoading} from "src/utils/loading";
+import {useQuasar} from "quasar";
 
 export default {
   name: "LoginPage",
@@ -133,7 +133,7 @@ export default {
       try {
         let res = await requestLogin(data.value.loginForm);
         console.log(res);
-        await router.push({ name: "overview" });
+        await router.push({name: "overview"});
       } catch (err) {
         ui.value.loginBtn.loading = false;
         errorLoading($q, err);

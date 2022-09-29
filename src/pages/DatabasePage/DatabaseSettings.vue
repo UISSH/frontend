@@ -7,13 +7,13 @@
 </template>
 
 <script>
-import { useRoute } from "vue-router";
-import { onMounted, ref } from "vue";
+import {useRoute} from "vue-router";
+import {onMounted, ref} from "vue";
 import DatabaseSettings from "components/database/DatabaseSettings";
 
 export default {
   name: "DatabaseSettingsPage",
-  components: { DatabaseSettings },
+  components: {DatabaseSettings},
   setup() {
     let data = ref({
       pk: null,

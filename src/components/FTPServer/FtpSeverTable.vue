@@ -4,7 +4,7 @@
       v-model="ui.dialog.ftpAccountSettings"
     >
       <div>
-        <account-setting :data="ui.accountSetting.data" ref="accountSettingRef"></account-setting>
+        <account-setting ref="accountSettingRef" :data="ui.accountSetting.data"></account-setting>
 
       </div>
     </q-dialog>
@@ -14,7 +14,7 @@
     <q-card class="apple-card-shadow ">
       <q-card-section class="flex bg-primary text-white justify-between items-center  ">
         <div class="text-body1"> Install ftpserver</div>
-        <q-btn flat icon="fab fa-github" type="a" href="https://github.com/fclairamb/ftpserver" target="_blank"
+        <q-btn flat href="https://github.com/fclairamb/ftpserver" icon="fab fa-github" target="_blank" type="a"
         >
         </q-btn>
       </q-card-section>
@@ -22,7 +22,7 @@
         Software needs to be installed to continue.
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn color="primary" label="install" @click="requestInstall" :loading="ui.loading.requestInstall"></q-btn>
+        <q-btn :loading="ui.loading.requestInstall" color="primary" label="install" @click="requestInstall"></q-btn>
       </q-card-actions>
     </q-card>
 
@@ -31,7 +31,7 @@
     <q-banner class=" bg-blue-grey-2 text-dark ">
       <div class="flex justify-between items-center no-wrap">
         <div class="flex q-gutter-sm items-baseline no-wrap">
-          <q-badge rounded :color="ui.status.run_status ? 'green':'red'">
+          <q-badge :color="ui.status.run_status ? 'green':'red'" rounded>
             <q-tooltip>
               run status
             </q-tooltip>
@@ -40,17 +40,17 @@
         </div>
 
         <div class="flex q-gutter-xs">
-          <q-btn flat dense icon="o_add" @click="clickEditor(undefined)"></q-btn>
-          <q-btn flat dense icon="o_sync" @click="requestSyncFtpServerAccount"
-                 :loading="ui.loading.requestSyncFtpServerAccount">
+          <q-btn dense flat icon="o_add" @click="clickEditor(undefined)"></q-btn>
+          <q-btn :loading="ui.loading.requestSyncFtpServerAccount" dense flat icon="o_sync"
+                 @click="requestSyncFtpServerAccount">
             <q-tooltip>sync account data to ftp server.</q-tooltip>
           </q-btn>
-          <q-btn flat dense icon="o_power_settings_new" v-if="ui.status.run_status" @click="requestStopServer"
-                 :loading="ui.loading.requestStopServer"
+          <q-btn v-if="ui.status.run_status" :loading="ui.loading.requestStopServer" dense flat icon="o_power_settings_new"
+                 @click="requestStopServer"
           ></q-btn>
-          <q-btn v-else flat dense icon="o_play_circle" @click="requestStartServer"
-                 :loading="ui.loading.requestStartServer"></q-btn>
-          <q-btn flat dense icon="o_refresh" @click="requestInstance" :loading="ui.loading.requestInstance"></q-btn>
+          <q-btn v-else :loading="ui.loading.requestStartServer" dense flat icon="o_play_circle"
+                 @click="requestStartServer"></q-btn>
+          <q-btn :loading="ui.loading.requestInstance" dense flat icon="o_refresh" @click="requestInstance"></q-btn>
         </div>
 
 
@@ -70,8 +70,8 @@
         <q-td :props="props">
 
           <div class="">
-            <q-btn dense rounded flat icon="settings" @click="clickEditor(props.row)"></q-btn>
-            <q-btn :loading="ui.loading.requestDeleteAccount" dense rounded flat icon="delete"
+            <q-btn dense flat icon="settings" rounded @click="clickEditor(props.row)"></q-btn>
+            <q-btn :loading="ui.loading.requestDeleteAccount" dense flat icon="delete" rounded
                    @click="requestDeleteAccount(props.row.id)"></q-btn>
           </div>
         </q-td>
@@ -104,11 +104,12 @@ import {listResStruct} from "src/utils/struct";
 import {
   deleteAccount,
   installFtpServer,
-  listFtpServer, patchAccount,
+  listFtpServer,
   pingFtpServer,
   reloadFtpServer,
   startFtpServer,
-  stopFtpServer, syncFtpServerAccount
+  stopFtpServer,
+  syncFtpServerAccount
 } from "src/api/ftpserver";
 import AccountSetting from "components/FTPServer/AccountSetting";
 

@@ -194,35 +194,30 @@
 </template>
 
 <script>
-import { nextTick, onMounted, ref, toRaw, watchEffect } from "vue";
+import {nextTick, onMounted, ref, toRaw, watchEffect} from "vue";
 import NewWebsite from "components/website/NewWebsite";
-import { openURL, useQuasar } from "quasar";
-import { listResStruct } from "src/utils/struct";
+import {openURL, useQuasar} from "quasar";
+import {listResStruct} from "src/utils/struct";
 
-import {
-  deleteWebsite,
-  disableWebsiteSSL,
-  enableWebsiteSSL,
-  listWebsite,
-} from "src/api/website";
-import { errorLoading, hideLoading, showLoading } from "src/utils/loading";
-import { doApplication } from "src/api/application";
-import { useRouter } from "vue-router";
+import {deleteWebsite, disableWebsiteSSL, enableWebsiteSSL, listWebsite,} from "src/api/website";
+import {errorLoading, hideLoading, showLoading} from "src/utils/loading";
+import {doApplication} from "src/api/application";
+import {useRouter} from "vue-router";
 
 let $q;
 
 const columns = [
-  { name: "domain", label: "Domain", align: "left", field: "domain" },
+  {name: "domain", label: "Domain", align: "left", field: "domain"},
   {
     name: "application",
     label: "Application",
     field: "application",
     align: "right",
   },
-  { name: "database", label: "Database", field: "database_name" },
-  { name: "path", label: "Path", field: "index_root" },
-  { name: "ssl", label: "SSL", field: "ssl_enable" },
-  { name: "status", label: "Status", field: "status" },
+  {name: "database", label: "Database", field: "database_name"},
+  {name: "path", label: "Path", field: "index_root"},
+  {name: "ssl", label: "SSL", field: "ssl_enable"},
+  {name: "status", label: "Status", field: "status"},
 ];
 
 const ui = ref({
@@ -268,7 +263,7 @@ const Public = {
 
 export default {
   name: "WebsiteTable",
-  components: { NewWebsite },
+  components: {NewWebsite},
   setup() {
     $q = useQuasar();
     const router = useRouter();
@@ -287,7 +282,7 @@ export default {
     });
 
     function toWebsiteSettings(id) {
-      router.push({ name: "websiteSettings", params: { id: id } });
+      router.push({name: "websiteSettings", params: {id: id}});
     }
 
     function enterFolder(path) {
@@ -300,7 +295,7 @@ export default {
     }
 
     function navDatabaseSettings(id) {
-      router.push({ name: "databaseSettings", params: { id: id } });
+      router.push({name: "databaseSettings", params: {id: id}});
     }
 
     function onUpdatePagination(page) {
@@ -335,7 +330,8 @@ export default {
     function requestDeleteWebsite() {
       showLoading($q);
       deleteWebsite(tableSelected.value[0].id)
-        .then((res) => {})
+        .then((res) => {
+        })
         .catch((err) => {
           errorLoading($q, err);
         })
@@ -357,7 +353,7 @@ export default {
       showLoading($q);
       _request(data.id, data)
         .then((res) => {
-          console.log({ putWebsite: res });
+          console.log({putWebsite: res});
         })
         .catch((err) => {
           errorLoading($q, err);
@@ -371,7 +367,8 @@ export default {
     function requestApplicationAction(action) {
       showLoading($q);
       doApplication(tableSelected.value[0].id, action)
-        .then((res) => {})
+        .then((res) => {
+        })
         .catch((err) => {
           errorLoading($q, err);
         })

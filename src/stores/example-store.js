@@ -3,15 +3,15 @@ import {defineStore} from "pinia";
 export const globalShellCommand = defineStore("GShellCommand", {
   state: () => {
     return {
-      uuidHex:[],
-      command:""
+      uuidHex: [],
+      command: ""
     }
   },
   getters: {
     getCommand: (state) => state.command
   },
-  actions:{
-    updateMsg(uuidHex,command){
+  actions: {
+    updateMsg(uuidHex, command) {
       this.uuidHex = uuidHex
       this.command = command
     }

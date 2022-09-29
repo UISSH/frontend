@@ -60,7 +60,7 @@
               @update:model-value="onSearch"
             >
               <template v-slot:append>
-                <q-icon name="search" />
+                <q-icon name="search"/>
               </template>
             </q-input>
             <q-file
@@ -73,7 +73,7 @@
               @rejected="onRejected"
             >
               <template v-slot:prepend>
-                <q-icon name="cloud_upload" />
+                <q-icon name="cloud_upload"/>
               </template>
               <template v-slot:after>
                 <q-btn
@@ -146,21 +146,15 @@
 </template>
 
 <script>
-import { nextTick, onMounted, ref } from "vue";
-import { listResStruct } from "src/utils/struct";
-import {
-  downloadFile,
-  executeCMD,
-  getUsers,
-  listDirectory,
-  uploadFile,
-} from "src/api/filebrowser";
-import { date, format, useQuasar } from "quasar";
-import { errorLoading, hideLoading, showLoading } from "src/utils/loading";
-import { useRoute, useRouter } from "vue-router";
+import {nextTick, onMounted, ref} from "vue";
+import {listResStruct} from "src/utils/struct";
+import {downloadFile, executeCMD, getUsers, listDirectory, uploadFile,} from "src/api/filebrowser";
+import {date, format, useQuasar} from "quasar";
+import {errorLoading, hideLoading, showLoading} from "src/utils/loading";
+import {useRoute, useRouter} from "vue-router";
 
 const columns = [
-  { name: "filename", label: "filename", align: "left", field: "filename" },
+  {name: "filename", label: "filename", align: "left", field: "filename"},
   {
     name: "size",
     label: "size",
@@ -168,10 +162,10 @@ const columns = [
     field: "size",
     format: (val) => format.humanStorageSize(val),
   },
-  { name: "mode", label: "mode", align: "left", field: "mode" },
-  { name: "uid", label: "uid", align: "left", field: "uid" },
-  { name: "gid", label: "gid", align: "left", field: "gid" },
-  { name: "action", label: "action", align: "right", field: "path" },
+  {name: "mode", label: "mode", align: "left", field: "mode"},
+  {name: "uid", label: "uid", align: "left", field: "uid"},
+  {name: "gid", label: "gid", align: "left", field: "gid"},
+  {name: "action", label: "action", align: "right", field: "path"},
   {
     name: "mtime",
     label: "mtime",
@@ -182,7 +176,7 @@ const columns = [
 ];
 export default {
   name: "FileManger",
-  setup(props, { emit }) {
+  setup(props, {emit}) {
     const $q = useQuasar();
     const route = useRoute();
     const router = useRouter();
@@ -255,7 +249,8 @@ export default {
           }
           tableData.value.results = res;
         })
-        .catch((err) => {})
+        .catch((err) => {
+        })
         .finally(() => {
           nextTick(() => {
             tableData.value.pagination.loading = false;

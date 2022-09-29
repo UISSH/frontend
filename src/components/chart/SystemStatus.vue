@@ -134,10 +134,10 @@
 </template>
 
 <script>
-import { onBeforeUnmount, onMounted, ref } from "vue";
-import { format, useQuasar } from "quasar";
+import {onBeforeUnmount, onMounted, ref} from "vue";
+import {format, useQuasar} from "quasar";
 import createWebsocket from "src/utils/websocket";
-import { errorLoading } from "src/utils/loading";
+import {errorLoading} from "src/utils/loading";
 
 const columns = [
   {
@@ -188,7 +188,7 @@ export default {
   name: "SystemStatus",
   components: {},
   setup() {
-    const { capitalize, humanStorageSize } = format;
+    const {capitalize, humanStorageSize} = format;
     const $q = useQuasar();
     let serverStatus = ref({
       cpu: {
@@ -240,7 +240,7 @@ export default {
         cpu.used = (
           (1 -
             (Number(cpu.info_1.idle) - Number(cpu.info_0.idle)) /
-              (total_1 - total_0)) *
+            (total_1 - total_0)) *
           100
         ).toFixed(2);
         cpu.info_0 = cpu_time;
@@ -253,9 +253,9 @@ export default {
       memory.info = memory_info;
       memory.used = (
         ((Number(memory_info.memory_total) -
-          Number(memory_info.buffers) -
-          Number(memory_info.memory_free) -
-          Number(memory_info.cached)) /
+            Number(memory_info.buffers) -
+            Number(memory_info.memory_free) -
+            Number(memory_info.cached)) /
           Number(memory_info.memory_total)) *
         100
       ).toFixed(2);
@@ -287,7 +287,7 @@ export default {
           continue;
         }
         if (system_info[_key]) {
-          let item = { name: _key, value: system_info[_key] };
+          let item = {name: _key, value: system_info[_key]};
           if (item.name === "physical_memory") {
             item.value = humanStorageSize(item.value);
           }

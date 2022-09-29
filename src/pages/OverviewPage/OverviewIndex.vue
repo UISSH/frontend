@@ -13,8 +13,7 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
-import { faker } from "@faker-js/faker";
+import {onMounted, ref} from "vue";
 import NetworkTrafficChart from "components/chart/NetworkTrafficChart";
 import SystemStatus from "components/chart/SystemStatus";
 
@@ -49,10 +48,11 @@ const Public = {
 const data = ref({});
 export default {
   name: "OverviewIndex",
-  components: { NetworkTrafficChart, SystemStatus },
+  components: {NetworkTrafficChart, SystemStatus},
   setup() {
-    onMounted(() => {});
-    return { ui, data, Public };
+    onMounted(() => {
+    });
+    return {ui, data, Public};
   },
 };
 </script>

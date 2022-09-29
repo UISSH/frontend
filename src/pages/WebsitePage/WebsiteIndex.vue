@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import {ref} from "vue";
 import WebsiteTable from "components/website/WebsiteTable";
 
 const ui = ref({});
@@ -13,9 +13,9 @@ const ui = ref({});
 const data = ref({});
 export default {
   name: "WebsiteIndex",
-  components: { WebsiteTable },
+  components: {WebsiteTable},
   setup() {
-    return { ui, data };
+    return {ui, data};
   },
 };
 </script>

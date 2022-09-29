@@ -10,15 +10,15 @@
           round
           @click="toggleLeftDrawer"
         />
-        <q-btn flat dense icon="arrow_back" @click="$router.back()"></q-btn>
+        <q-btn dense flat icon="arrow_back" @click="$router.back()"></q-btn>
         <q-toolbar-title>
         </q-toolbar-title>
         <q-btn
           class="text-caption"
+          dense
           flat
           href="https://github.com/UISSH/"
           no-caps
-          dense
           target="_blank"
           type="a"
         >v{{ pkJson.version }}

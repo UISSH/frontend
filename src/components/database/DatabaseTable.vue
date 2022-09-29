@@ -15,11 +15,11 @@
 
     <q-table
       v-model:selected="tableSelected"
-      dense
       :columns="columns"
       :loading="tableData.pagination.loading"
       :rows="tableData.results"
       class="shadow-0"
+      dense
       hide-pagination
       row-key="id"
       selection="multiple"
@@ -171,11 +171,7 @@
 <script>
 import {nextTick, onMounted, ref} from "vue";
 import {listResStruct} from "src/utils/struct";
-import {
-  createDataBaseInstance,
-  deleteDatabase,
-  listDatabase,
-} from "src/api/database";
+import {createDataBaseInstance, deleteDatabase, listDatabase,} from "src/api/database";
 import InputArea from "components/base/InputArea";
 import NewDatabase from "components/database/NewDatabase";
 import {useRouter} from "vue-router";

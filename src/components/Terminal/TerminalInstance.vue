@@ -1,8 +1,8 @@
 <template>
   <div class="flex  q-gutter-sm items-center content-center q-mb-sm ">
     <div class="text-green ">{{ props.auth.username }}@{{ props.auth.hostname }}:{{ props.auth.port }}</div>
-    <q-icon size="18px" name="o_online_prediction" :color="connectStatus"></q-icon>
-    <q-btn dense style="background-color: #282a36" color="white" flat label="reset"
+    <q-icon :color="connectStatus" name="o_online_prediction" size="18px"></q-icon>
+    <q-btn color="white" dense flat label="reset" style="background-color: #282a36"
            @click="resizeRemoteTerminal"></q-btn>
   </div>
   <q-separator class="bg-white q-mb-sm"></q-separator>

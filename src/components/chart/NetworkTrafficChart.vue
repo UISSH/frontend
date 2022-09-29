@@ -22,34 +22,27 @@
       </div>
     </q-card-section>
     <q-card-section>
-      <v-chart :option="ui.option" class="chart" />
+      <v-chart :option="ui.option" class="chart"/>
     </q-card-section>
   </q-card>
 </template>
 
 <script>
-import { use } from "echarts/core";
-import { CanvasRenderer } from "echarts/renderers";
+import {use} from "echarts/core";
+import {CanvasRenderer} from "echarts/renderers";
 
-import { LineChart } from "echarts/charts";
-import { UniversalTransition } from "echarts/features";
-import { format } from "quasar";
-import {
-  GridComponent,
-  LegendComponent,
-  TitleComponent,
-  ToolboxComponent,
-  TooltipComponent,
-} from "echarts/components";
+import {LineChart} from "echarts/charts";
+import {UniversalTransition} from "echarts/features";
+import {format} from "quasar";
+import {GridComponent, LegendComponent, TitleComponent, ToolboxComponent, TooltipComponent,} from "echarts/components";
 
-import VChart, { THEME_KEY } from "vue-echarts";
+import VChart, {THEME_KEY} from "vue-echarts";
 
-import { onBeforeUnmount, onMounted, ref } from "vue";
-import { faker } from "@faker-js/faker";
-import { graphic } from "echarts";
+import {onBeforeUnmount, onMounted, ref} from "vue";
+import {graphic} from "echarts";
 import createWebsocket from "src/utils/websocket";
 // destructuring to keep only what is needed
-const { humanStorageSize } = format;
+const {humanStorageSize} = format;
 
 use([
   TitleComponent,
@@ -106,7 +99,7 @@ export default {
           type: "line",
           smooth: true,
           circle: "circle",
-          itemStyle: { color: "#52a9ff" },
+          itemStyle: {color: "#52a9ff"},
           areaStyle: {
             color: new graphic.LinearGradient(
               0,
@@ -118,12 +111,12 @@ export default {
                   offset: 0,
                   color: "rgba(30, 144, 255,1)",
                 },
-                { offset: 1, color: "rgba(30, 144, 255,.4)" },
+                {offset: 1, color: "rgba(30, 144, 255,.4)"},
               ],
               false
             ),
           },
-          lineStyle: { width: 1, color: "#52a9ff" },
+          lineStyle: {width: 1, color: "#52a9ff"},
           data: [[Date.now(), 0]],
         },
         {
@@ -131,7 +124,7 @@ export default {
           type: "line",
           smooth: true,
           circle: "circle",
-          itemStyle: { color: "#f7b851" },
+          itemStyle: {color: "#f7b851"},
           areaStyle: {
             color: new graphic.LinearGradient(
               0,
@@ -143,12 +136,12 @@ export default {
                   offset: 0,
                   color: "rgba(255, 140, 0,1)",
                 },
-                { offset: 1, color: "rgba(255, 140, 0,.4)" },
+                {offset: 1, color: "rgba(255, 140, 0,.4)"},
               ],
               false
             ),
           },
-          lineStyle: { width: 1, color: "#f7b851" },
+          lineStyle: {width: 1, color: "#f7b851"},
           data: [[Date.now(), 0]],
         },
       ],

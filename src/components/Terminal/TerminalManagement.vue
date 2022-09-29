@@ -1,55 +1,55 @@
 <template>
   <q-card class="no-border-radius" style="height: 100%">
     <q-card-section>
-      <input type="password" hidden autocomplete="new-password">
+      <input autocomplete="new-password" hidden type="password">
       <div class="flex justify-between">
         <div class="text-h6">Host</div>
-        <q-btn-dropdown style="border-radius:16px" color="dark" text-color="" icon="add">
+        <q-btn-dropdown color="dark" icon="add" style="border-radius:16px" text-color="">
           <q-card style="min-width: 420px">
             <q-card-section class="bg-blue-grey-1 text-dark ">
               <div class="flex q-gutter-sm items-center">
-                <q-icon size="24px" name="o_terminal"></q-icon>
-                <div class="text-h6  ">Host</div>
+                <q-icon name="o_terminal" size="24px"></q-icon>
+                <div class="text-h6">Host</div>
               </div>
             </q-card-section>
 
             <q-card-section class="q-gutter-sm">
-              <q-input label="name" color="dark" v-model="data.newSSH.name" ></q-input>
+              <q-input v-model="data.newSSH.name" color="dark" label="name"></q-input>
               <div class="row">
-                <q-input class="col-10" label="host" color="dark" v-model="data.newSSH.hostname"></q-input>
-                <q-input class="col-2" label="port" color="dark" v-model="data.newSSH.port"></q-input>
+                <q-input v-model="data.newSSH.hostname" class="col-10" color="dark" label="host"></q-input>
+                <q-input v-model="data.newSSH.port" class="col-2" color="dark" label="port"></q-input>
               </div>
               <q-input
-                class="col-6" label="username" color="dark"
-                v-model="data.newSSH.username"></q-input>
+                v-model="data.newSSH.username" class="col-6" color="dark"
+                label="username"></q-input>
               <div v-if="!data.newSSH.keyLogin" class="row">
 
                 <q-input
-                  class="col-12" label="password" type="password" color="dark"
-                  v-model="data.newSSH.password"></q-input>
+                  v-model="data.newSSH.password" class="col-12" color="dark" label="password"
+                  type="password"></q-input>
               </div>
 
               <div v-if="data.newSSH.keyLogin" class="row">
 
-                <q-file class="col-6"
-                        v-model="data.newSSH.private_key_file"
-                        label="key"
+                <q-file v-model="data.newSSH.private_key_file"
+                        class="col-6"
                         color="dark"
+                        label="key"
                         @update:model-value="updatePrivateKey"
 
                 />
-                <q-input class="col-6" label="key password" color="dark"
-                         v-model="data.newSSH.private_key_password"></q-input>
+                <q-input v-model="data.newSSH.private_key_password" class="col-6" color="dark"
+                         label="key password"></q-input>
               </div>
 
-              <q-toggle color="dark" label="Enable Keys Login" v-model="data.newSSH.keyLogin"></q-toggle>
+              <q-toggle v-model="data.newSSH.keyLogin" color="dark" label="Enable Keys Login"></q-toggle>
             </q-card-section>
             <q-card-actions class="justify-around">
-              <q-btn class="text-capitalize" label="connect" @click="connectSSH" icon="o_bolt" icon-right=""
-                     color="dark" no-caps/>
-              <q-btn label="add" icon="o_add" icon-right="" @click="addSSH" color="dark"/>
-              <q-btn class="text-capitalize" label="cancel" v-close-popup no-caps color="dark" icon-right=""
-                     icon="cancel"></q-btn>
+              <q-btn class="text-capitalize" color="dark" icon="o_bolt" icon-right="" label="connect"
+                     no-caps @click="connectSSH"/>
+              <q-btn color="dark" icon="o_add" icon-right="" label="add" @click="addSSH"/>
+              <q-btn v-close-popup class="text-capitalize" color="dark" icon="cancel" icon-right="" label="cancel"
+                     no-caps></q-btn>
             </q-card-actions>
           </q-card>
         </q-btn-dropdown>
@@ -58,11 +58,11 @@
       <q-separator class="q-mt-sm q-mb-sm"></q-separator>
       <div class=" flex q-gutter-sm">
         <div v-for="i in Object.keys(SSHClient)" :key="i">
-          <div class="flex justify-between bg-blue-grey rounded-borders"  style="width: 300px" >
-            <q-btn style="min-width: 268px" :label="i" @click="clickSSHClient(i)" flat text-color="white"/>
-            <q-btn-dropdown flat text-color="white" style="max-width: 8px">
-              <q-list >
-                <q-item clickable v-close-popup>
+          <div class="flex justify-between bg-blue-grey rounded-borders" style="width: 300px">
+            <q-btn :label="i" flat style="min-width: 268px" text-color="white" @click="clickSSHClient(i)"/>
+            <q-btn-dropdown flat style="max-width: 8px" text-color="white">
+              <q-list>
+                <q-item v-close-popup clickable>
                   <q-item-section class="text-right">
                     <q-item-label @click="deleteSSH(i)">Delete</q-item-label>
                   </q-item-section>
@@ -130,7 +130,6 @@ export default {
     function clickSSHClient(name) {
       data.value.newSSH = SSHClient.value[name]
       connectSSH()
-
     }
 
     function addSSH() {
@@ -166,7 +165,7 @@ export default {
       saveSSHClient()
     })
 
-    return {ui, data, connectSSH, addSSH, deleteSSH, clickSSHClient, updatePrivateKey, SSHClient, }
+    return {ui, data, connectSSH, addSSH, deleteSSH, clickSSHClient, updatePrivateKey, SSHClient,}
   }
 }
 </script>

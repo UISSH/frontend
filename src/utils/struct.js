@@ -1,4 +1,4 @@
-import { USER_INFO } from "src/utils/mutation-types";
+import {USER_INFO} from "src/utils/mutation-types";
 
 export function listResStruct() {
   return {
