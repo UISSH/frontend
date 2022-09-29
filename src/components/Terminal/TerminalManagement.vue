@@ -81,6 +81,7 @@
 
 <script>
 import {onMounted, onUnmounted, ref, toRaw} from "vue";
+import KVStorage from "src/utils/kv-storage";
 
 export default {
   name: "TerminalManagement",
@@ -103,8 +104,16 @@ export default {
       }
     })
 
-
     let SSHClient = ref({})
+    let kv = new KVStorage("SSH_CLIENT")
+    kv.init().then(val => {
+      if (val == null) {
+        SSHClient.value = {}
+      } else {
+        SSHClient.value = JSON.parse(val)
+      }
+    })
+
 
     function updatePrivateKey(val) {
       val.text().then((text) => {
@@ -113,7 +122,9 @@ export default {
     }
 
     function loadingSSHClient() {
-      let res = window.localStorage.getItem("SSH_CLIENT")
+
+      let res = kv.getItem()
+      // let res = window.localStorage.getItem("SSH_CLIENT")
       if (res == null) {
         SSHClient.value = {}
       } else {
@@ -122,8 +133,10 @@ export default {
     }
 
     function saveSSHClient() {
+
       let _data = toRaw(SSHClient.value)
-      window.localStorage.setItem("SSH_CLIENT", JSON.stringify(_data))
+      //window.localStorage.setItem("SSH_CLIENT", JSON.stringify(_data))
+      kv.setItem(JSON.stringify(_data))
 
     }
 
@@ -158,7 +171,7 @@ export default {
     }
 
     onMounted(() => {
-      loadingSSHClient()
+
     })
 
     onUnmounted(() => {
