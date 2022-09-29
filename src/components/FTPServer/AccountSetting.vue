@@ -1,5 +1,5 @@
 <template>
-  <q-card class="shadow-0">
+  <q-card class="card-box shadow-0 ">
     <q-card-section class="bg-blue-grey text-white flex justify-between items-center">
       <div>FTP Server Account Settings</div>
       <q-btn flat dense target="_blank" type="a" href="https://github.com/fclairamb/ftpserver#config-file"
@@ -47,14 +47,6 @@ import {errorLoading, hideLoading, showLoading} from "src/utils/loading";
 const fileSystemParams = {
   'os': {
     "basePath": "/tmp"
-  },
-  'dropbox': {
-    "token": "dropbox token"
-  },
-  'gdrive': {
-    "google_client_id": "***.apps.googleusercontent.com",
-    "google_client_secret": "****",
-    "base_path": "ftp"
   },
   's3': {
     "endpoint": "https://s3.amazonaws.com",
@@ -153,14 +145,6 @@ export default {
           value: 'os'
         },
         {
-          label: 'dropbox',
-          value: 'dropbox'
-        },
-        {
-          label: 'gdrive',
-          value: 'gdrive'
-        },
-        {
           label: 's3',
           value: 's3'
         },
@@ -183,5 +167,12 @@ export default {
 </script>
 
 <style scoped>
+.card-box {
+
+  min-width: 360px;
+  width: 80vw;
+  max-width: 530px;
+
+}
 
 </style>

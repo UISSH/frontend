@@ -2,25 +2,27 @@
   <div class="flex  q-gutter-sm items-center content-center q-mb-sm ">
     <div class="text-green ">{{ props.auth.username }}@{{ props.auth.hostname }}:{{ props.auth.port }}</div>
     <q-icon size="18px" name="o_online_prediction" :color="connectStatus"></q-icon>
-    <q-btn dense style="background-color: #282a36" color="white"  flat label="reset" @click="resizeRemoteTerminal"></q-btn>
+    <q-btn dense style="background-color: #282a36" color="white" flat label="reset"
+           @click="resizeRemoteTerminal"></q-btn>
   </div>
   <q-separator class="bg-white q-mb-sm"></q-separator>
   <div class="flex flex-center " style="height: calc(100% - 40px);">
-    <div :id="uid" style="width: 100%;height: 100%"></div>
+    <div :id="props.uuid" style="width: 100%;height: 100%"></div>
   </div>
 </template>
 
 <script>
-import {onBeforeUnmount, onMounted, onUnmounted, ref} from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
 import {generateUUID4} from "src/utils/generate";
 import {FitAddon} from "xterm-addon-fit";
 import {WebLinksAddon} from "xterm-addon-web-links";
 import {Terminal} from "xterm";
 import {Cookies} from "quasar";
 import {ACCESS_TOKEN} from "src/utils/mutation-types";
-import {WebglAddon} from 'xterm-addon-webgl';
+
 
 import 'xterm/css/xterm.css'
+import {globalShellCommand} from "stores/example-store";
 
 
 let basicTheme = {
@@ -57,6 +59,9 @@ let basicTheme = {
 export default {
   name: "TerminalInstance",
   props: {
+    uuid: {
+      type: String
+    },
     title: {
       type: String
     },
@@ -66,7 +71,8 @@ export default {
   },
   setup(props, {emit}) {
     const v = ref()
-    const uid = generateUUID4()
+
+    const GShellCommand = globalShellCommand()
     const term = new Terminal({
       fontFamily: '"Cascadia Code", Menlo, monospace',
       theme: basicTheme,
@@ -83,14 +89,14 @@ export default {
     }
 
     function init() {
-      let element = document.getElementById(uid);
+      let element = document.getElementById(props.uuid);
       term.loadAddon(new WebLinksAddon());
       term.loadAddon(fitAddon);
       term.open(element);
       term.onResize(size => {
         terminalSize.cols = size.cols
         terminalSize.rows = size.rows
-        console.log(terminalSize)
+
       });
       fitAddon.fit();
 
@@ -108,7 +114,6 @@ export default {
     function resizeScreen(size) {
       try {
         fitAddon.fit();
-
       } catch (e) {
         console.log("e", e.message);
       }
@@ -161,6 +166,18 @@ export default {
       });
     }
 
+    GShellCommand.$subscribe((mutation, state) => {
+        if (state.uuidHex.includes(props.uuid)) {
+          terminalSocket.send(
+            JSON.stringify({
+              message: state.command + " \r",
+            })
+          );
+        }
+      }
+    )
+
+
     onMounted(() => {
       init()
       initTerminal()
@@ -172,7 +189,7 @@ export default {
       terminalSocket.close()
     })
 
-    return {props, v, uid, connectStatus, resizeRemoteTerminal}
+    return {props, v, connectStatus, resizeRemoteTerminal}
 
 
   }

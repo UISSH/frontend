@@ -14,7 +14,7 @@
             </q-card-section>
 
             <q-card-section class="q-gutter-sm">
-              <q-input label="name" color="dark" v-model="data.newSSH.name" @update:model-value="log"></q-input>
+              <q-input label="name" color="dark" v-model="data.newSSH.name" ></q-input>
               <div class="row">
                 <q-input class="col-10" label="host" color="dark" v-model="data.newSSH.hostname"></q-input>
                 <q-input class="col-2" label="port" color="dark" v-model="data.newSSH.port"></q-input>
@@ -56,21 +56,20 @@
       </div>
 
       <q-separator class="q-mt-sm q-mb-sm"></q-separator>
-      <div class="flex q-gutter-md">
+      <div class=" flex q-gutter-sm">
         <div v-for="i in Object.keys(SSHClient)" :key="i">
-          <q-btn-dropdown split color="blue-grey-1" text-color="dark" :label="i"
-                          style="min-width: 300px" @click="clickSSHClient(i)">
-            <q-list>
-              <q-item clickable v-close-popup>
-                <q-item-section>
-                  <q-item-label @click="deleteSSH(i)">Delete</q-item-label>
-                </q-item-section>
-              </q-item>
-
-
-            </q-list>
-          </q-btn-dropdown>
-
+          <div class="flex justify-between bg-blue-grey rounded-borders"  style="width: 300px" >
+            <q-btn style="min-width: 268px" :label="i" @click="clickSSHClient(i)" flat text-color="white"/>
+            <q-btn-dropdown flat text-color="white" style="max-width: 8px">
+              <q-list >
+                <q-item clickable v-close-popup>
+                  <q-item-section class="text-right">
+                    <q-item-label @click="deleteSSH(i)">Delete</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-btn-dropdown>
+          </div>
         </div>
       </div>
 
@@ -115,7 +114,6 @@ export default {
 
     function loadingSSHClient() {
       let res = window.localStorage.getItem("SSH_CLIENT")
-      console.log({"loadingSSHClient": JSON.parse(res)})
       if (res == null) {
         SSHClient.value = {}
       } else {
@@ -168,12 +166,7 @@ export default {
       saveSSHClient()
     })
 
-    function log(){
-      console.log(data.value.newSSH)
-    }
-
-
-    return {ui, data, connectSSH, addSSH, deleteSSH, clickSSHClient, updatePrivateKey,SSHClient,log}
+    return {ui, data, connectSSH, addSSH, deleteSSH, clickSSHClient, updatePrivateKey, SSHClient, }
   }
 }
 </script>

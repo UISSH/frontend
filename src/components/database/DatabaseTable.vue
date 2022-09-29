@@ -15,17 +15,18 @@
 
     <q-table
       v-model:selected="tableSelected"
+      dense
       :columns="columns"
       :loading="tableData.pagination.loading"
       :rows="tableData.results"
-      class="q-pa-none shadow-0"
+      class="shadow-0"
       hide-pagination
       row-key="id"
       selection="multiple"
     >
       <template v-slot:top>
         <div class="flex justify-between q-gutter-sm" style="width: 100%">
-          <div class="flex q-gutter-sm">
+          <div class="q-mb-sm flex q-gutter-sm">
             <q-btn
               color="blue-grey"
               icon="o_add"
@@ -71,10 +72,12 @@
               icon="o_public"
             >
               <q-tooltip v-if="props.website">
-                click to go to website</q-tooltip
+                click to go to website
+              </q-tooltip
               >
               <q-tooltip v-else>
-                this database is a standalone resource</q-tooltip
+                this database is a standalone resource
+              </q-tooltip
               >
             </q-btn>
           </div>
@@ -166,8 +169,8 @@
   </div>
 </template>
 <script>
-import { nextTick, onMounted, ref } from "vue";
-import { listResStruct } from "src/utils/struct";
+import {nextTick, onMounted, ref} from "vue";
+import {listResStruct} from "src/utils/struct";
 import {
   createDataBaseInstance,
   deleteDatabase,
@@ -175,14 +178,14 @@ import {
 } from "src/api/database";
 import InputArea from "components/base/InputArea";
 import NewDatabase from "components/database/NewDatabase";
-import { useRouter } from "vue-router";
-import { errorLoading, hideLoading, showLoading } from "src/utils/loading";
-import { useQuasar } from "quasar";
+import {useRouter} from "vue-router";
+import {errorLoading, hideLoading, showLoading} from "src/utils/loading";
+import {useQuasar} from "quasar";
 
 export default {
   name: "DatabaseTable",
-  components: { InputArea, NewDatabase },
-  setup(props, { emit }) {
+  components: {InputArea, NewDatabase},
+  setup(props, {emit}) {
     const router = useRouter();
     const $q = useQuasar();
 
@@ -200,9 +203,9 @@ export default {
     });
 
     const columns = [
-      { name: "website", label: t("website"), align: "left", field: "website" },
-      { name: "name", label: t("name"), field: "name" },
-      { name: "username", label: t("username"), field: "username" },
+      {name: "website", label: t("website"), align: "left", field: "website"},
+      {name: "name", label: t("name"), field: "name"},
+      {name: "username", label: t("username"), field: "username"},
       {
         name: "password",
         label: t("password"),
@@ -214,7 +217,7 @@ export default {
         label: `${t("database")} ${t("type")}`,
         field: "database_type_text",
       },
-      { name: "status", label: `${t("status")}`, field: "create_status_text" },
+      {name: "status", label: `${t("status")}`, field: "create_status_text"},
     ];
     const tableData = ref(listResStruct());
     const params = ref({
@@ -247,7 +250,8 @@ export default {
         .then((res) => {
           requestInstance();
         })
-        .catch((err) => {});
+        .catch((err) => {
+        });
     }
 
     function requestInstance() {
@@ -259,7 +263,8 @@ export default {
           tableData.value = res;
           tableData.value.pagination.loading = true;
         })
-        .catch((err) => {})
+        .catch((err) => {
+        })
         .finally(() => {
           setTimeout(() => {
             nextTick(() => {
@@ -271,7 +276,7 @@ export default {
 
     function toDatabaseSettings(id) {
       console.log(id);
-      router.push({ name: "databaseSettings", params: { id: id } });
+      router.push({name: "databaseSettings", params: {id: id}});
     }
 
     function newDataBaseOnSuccess() {

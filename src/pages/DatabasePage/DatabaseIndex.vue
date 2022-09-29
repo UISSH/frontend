@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-sm q-gutter-md">
+  <q-page class="q-gutter-md">
     <databaseTable></databaseTable>
   </q-page>
 </template>

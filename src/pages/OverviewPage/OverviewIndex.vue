@@ -1,8 +1,7 @@
 <template>
-  <q-page class="q-pa-md q-gutter-md bg-blue-grey-1">
+  <q-page class="q-gutter-md bg-blue-grey-1">
     <SystemStatus></SystemStatus>
-
-    <q-card class="shadow-0">
+    <q-card class="shadow-0 ">
       <q-card-section class="text-uppercase">
         {{ $t("charts") }}
       </q-card-section>

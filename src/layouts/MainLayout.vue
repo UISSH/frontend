@@ -10,11 +10,9 @@
           round
           @click="toggleLeftDrawer"
         />
-
+        <q-btn flat dense icon="arrow_back" @click="$router.back()"></q-btn>
         <q-toolbar-title>
-          <q-btn flat icon="arrow_back" @click="$router.back()"></q-btn>
         </q-toolbar-title>
-
         <q-btn
           class="text-caption"
           flat
@@ -23,7 +21,7 @@
           dense
           target="_blank"
           type="a"
-          >v{{ pkJson.version }}
+        >v{{ pkJson.version }}
         </q-btn>
 
       </q-toolbar>
@@ -36,7 +34,7 @@
       show-if-above
     >
       <q-list>
-        <q-item-label header> Keep simple </q-item-label>
+        <q-item-label header> Keep simple</q-item-label>
 
         <EssentialLink
           v-for="link in essentialLinks"
@@ -46,13 +44,13 @@
       </q-list>
     </q-drawer>
     <q-page-container>
-      <router-view />
+      <router-view/>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import {defineComponent, ref} from "vue";
 import EssentialLink from "components/EssentialLink.vue";
 import pkJson from "../../package.json";
 
