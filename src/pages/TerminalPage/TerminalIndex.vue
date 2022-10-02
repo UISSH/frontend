@@ -65,14 +65,14 @@ import {onBeforeUnmount, onMounted, ref} from "vue";
 import TerminalInstance from "components/Terminal/TerminalInstance";
 import TerminalManagement from "components/Terminal/TerminalManagement";
 import {generateUUID4} from "src/utils/generate";
-import {globalShellCommand} from "stores/example-store";
+import {globalShellCommandStore} from "stores/example-store";
 
 
 export default {
   name: "TerminalIndex",
   components: {TerminalInstance, TerminalManagement},
   setup() {
-    const GShellCommand = globalShellCommand()
+    const GShellCommand = globalShellCommandStore()
 
     //{
     //   "uuid_hex":{'name': '', 'auth': {}}
