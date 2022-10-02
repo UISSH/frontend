@@ -65,14 +65,14 @@ import {onBeforeUnmount, onMounted, ref} from "vue";
 import TerminalInstance from "components/Terminal/TerminalInstance";
 import TerminalManagement from "components/Terminal/TerminalManagement";
 import {generateUUID4} from "src/utils/generate";
-import {globalShellCommand} from "stores/example-store";
+import {globalShellCommandStore} from "stores/example-store";
 
 
 export default {
   name: "TerminalIndex",
   components: {TerminalInstance, TerminalManagement},
   setup() {
-    const GShellCommand = globalShellCommand()
+    const GShellCommand = globalShellCommandStore()
 
     //{
     //   "uuid_hex":{'name': '', 'auth': {}}
@@ -91,6 +91,9 @@ export default {
     })
 
     function syncGlobalShellOptions() {
+      /*
+      * Update the activated terminal in the terminal selection box.
+      * */
       globalShell.value.options = []
       for (let uuidHex of activeTerminalIndex.value) {
         globalShell.value.options.push({"label": instanceOfTerminalOpened.value[uuidHex].name, "value": uuidHex})

@@ -30,7 +30,6 @@
               </div>
 
               <div v-if="data.newSSH.keyLogin" class="row">
-
                 <q-file v-model="data.newSSH.private_key_file"
                         class="col-6"
                         color="dark"
@@ -57,14 +56,23 @@
 
       <q-separator class="q-mt-sm q-mb-sm"></q-separator>
       <div class=" flex q-gutter-sm">
-        <div v-for="i in Object.keys(SSHClient)" :key="i">
+        <div v-for="name in Object.keys(SSHClient)" :key="name">
           <div class="flex justify-between bg-blue-grey rounded-borders" style="width: 300px">
-            <q-btn :label="i" flat style="min-width: 268px" text-color="white" @click="clickSSHClient(i)"/>
+            <q-btn :label="name" flat style="min-width: 268px" text-color="white" @click="clickSSHClient(name)"/>
             <q-btn-dropdown flat style="max-width: 8px" text-color="white">
               <q-list>
-                <q-item v-close-popup clickable>
-                  <q-item-section class="text-right">
-                    <q-item-label @click="deleteSSH(i)">Delete</q-item-label>
+                <q-item v-close-popup clickable @click="deleteSSH(name)">
+
+                  <q-item-section>Delete</q-item-section>
+                  <q-item-section avatar>
+                    <q-icon color="red" name="o_delete"/>
+                  </q-item-section>
+
+                </q-item>
+                <q-item v-ripple clickable @click="addBookmark(name)">
+                  <q-item-section>Bookmark</q-item-section>
+                  <q-item-section avatar>
+                    <q-icon color="red" name="bookmark_border"/>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -82,10 +90,14 @@
 <script>
 import {onMounted, onUnmounted, ref, toRaw} from "vue";
 import KVStorage from "src/utils/kv-storage";
+import {useRoute} from "vue-router";
+import {shortcutStore} from "stores/shortcut";
 
 export default {
   name: "TerminalManagement",
   setup(props, {emit}) {
+    const shortcut = shortcutStore()
+    const route = useRoute()
     const ui = ref({
       showDelete: false
     })
@@ -111,6 +123,10 @@ export default {
         SSHClient.value = {}
       } else {
         SSHClient.value = JSON.parse(val)
+        if (route.params.hasOwnProperty('name') && route.params.name) {
+          clickSSHClient(route.params.name)
+          delete route.params['name']
+        }
       }
     })
 
@@ -129,6 +145,7 @@ export default {
         SSHClient.value = {}
       } else {
         SSHClient.value = JSON.parse(res)
+
       }
     }
 
@@ -137,6 +154,14 @@ export default {
       let _data = toRaw(SSHClient.value)
       //window.localStorage.setItem("SSH_CLIENT", JSON.stringify(_data))
       kv.setItem(JSON.stringify(_data))
+
+    }
+
+    function addBookmark(name) {
+      let instance = SSHClient.value[name]
+      let desc = `${instance.root}@${instance.hostname}`
+      let router = {'name': 'terminal', params: {'name': name}}
+      shortcut.addOrUpdateItem(name, "o_terminal", name, desc, 'terminal', router)
 
     }
 
@@ -171,6 +196,8 @@ export default {
     }
 
     onMounted(() => {
+      console.log(route.params)
+
 
     })
 
@@ -178,7 +205,7 @@ export default {
       saveSSHClient()
     })
 
-    return {ui, data, connectSSH, addSSH, deleteSSH, clickSSHClient, updatePrivateKey, SSHClient,}
+    return {ui, data, connectSSH, addSSH, deleteSSH, clickSSHClient, updatePrivateKey, SSHClient, addBookmark}
   }
 }
 </script>

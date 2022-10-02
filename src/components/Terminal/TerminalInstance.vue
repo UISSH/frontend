@@ -22,7 +22,7 @@ import {ACCESS_TOKEN} from "src/utils/mutation-types";
 
 
 import 'xterm/css/xterm.css'
-import {globalShellCommand} from "stores/example-store";
+import {globalShellCommandStore} from "stores/example-store";
 
 
 let basicTheme = {
@@ -72,7 +72,7 @@ export default {
   setup(props, {emit}) {
     const v = ref()
 
-    const GShellCommand = globalShellCommand()
+    const GShellCommand = globalShellCommandStore()
     const term = new Terminal({
       fontFamily: '"Cascadia Code", Menlo, monospace',
       theme: basicTheme,
