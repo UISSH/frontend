@@ -33,15 +33,25 @@ export const shortcutStore = defineStore("shortcut", {
       cate: [
         {name: 'all', icon: "o_tag", description: 'all '},
         {name: 'terminal', icon: "o_terminal", description: 'terminal'},
+        {name: 'folder', icon: "o_folder", description: 'folder'},
+        {name: 'edit', icon: "o_edit", description: 'edit'},
       ], items: { /* items */}
     }
-  }, getters: {}, actions: {
+  }, getters: {
+    getIconByUnique: (state) => {
+      return (uniqueKey) => {
+        console.log(uniqueKey)
+        if (state.items.hasOwnProperty(uniqueKey)) {
+          return 'o_star'
+        }
+        return 'o_star_outline'
+      }
+    },
+  }, actions: {
 
     async syncFromCloud() {
       let val = await getKV(UNIQUE_KEY)
-
       if (val.value === null) {
-
         this.items = {
           'hkdsfkhaf': {
             uniqueKey: 'hkdsfkhaf',
@@ -58,8 +68,9 @@ export const shortcutStore = defineStore("shortcut", {
         this.items = _data.items
       }
     },
-    async syncToCloud() {
 
+
+    async syncToCloud() {
       let _val = JSON.stringify({
         cate: this.cate,
         items: this.items
@@ -67,7 +78,7 @@ export const shortcutStore = defineStore("shortcut", {
       await updateKV(UNIQUE_KEY, _val)
     },
     async addOrUpdateItem(uniqueKey, icon, name, description, cate, router) {
-      if (!this.items.hasOwnProperty('uniqueKey')) {
+      if (!this.items.hasOwnProperty(uniqueKey)) {
         this.items[uniqueKey] = {}
       }
       let item = this.items[uniqueKey]

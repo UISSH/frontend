@@ -69,10 +69,10 @@
                   </q-item-section>
 
                 </q-item>
-                <q-item v-ripple clickable @click="addBookmark(name)">
+                <q-item v-close-popup v-ripple clickable @click="addBookmark(name)">
                   <q-item-section>Bookmark</q-item-section>
                   <q-item-section avatar>
-                    <q-icon color="red" name="bookmark_border"/>
+                    <q-icon :name="shortcut.getIconByUnique(name)" color="primary"/>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -159,10 +159,9 @@ export default {
 
     function addBookmark(name) {
       let instance = SSHClient.value[name]
-      let desc = `${instance.root}@${instance.hostname}`
+      let desc = `${instance.username}@${instance.hostname}`
       let router = {'name': 'terminal', params: {'name': name}}
       shortcut.addOrUpdateItem(name, "o_terminal", name, desc, 'terminal', router)
-
     }
 
     function clickSSHClient(name) {
@@ -205,7 +204,7 @@ export default {
       saveSSHClient()
     })
 
-    return {ui, data, connectSSH, addSSH, deleteSSH, clickSSHClient, updatePrivateKey, SSHClient, addBookmark}
+    return {ui, data, connectSSH, addSSH, deleteSSH, clickSSHClient, updatePrivateKey, SSHClient, addBookmark, shortcut}
   }
 }
 </script>

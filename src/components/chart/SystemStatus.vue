@@ -1,7 +1,11 @@
 <template>
   <q-card class="shadow-0">
     <q-card-section class="text-uppercase">
-      {{ $t("status") }}
+
+      <div class="flex items-center">
+        <q-icon color="primary" name="troubleshoot" size="24px"></q-icon>
+        <div class="text-body1 q-pa-xs"> {{ $t("status") }}</div>
+      </div>
     </q-card-section>
     <q-card-section>
       <div class="flex q-gutter-sm justify-around">
@@ -121,13 +125,20 @@
     </q-card-section>
   </q-card>
   <q-card class="shadow-0">
+    <q-card-section class="text-uppercase">
+
+      <div class="flex items-center">
+        <q-icon color="primary" name="assessment" size="24px"></q-icon>
+        <div class="text-body1 q-pa-xs"> Info</div>
+      </div>
+    </q-card-section>
     <q-table
       :columns="columns"
       :rows="serverStatus.systemInfo.rows"
       :rows-per-page-options="[6, 12, 20]"
       hide-header
       row-key="name"
-      title="System info"
+
     >
     </q-table>
   </q-card>

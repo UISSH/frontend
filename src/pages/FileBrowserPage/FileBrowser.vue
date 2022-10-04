@@ -5,6 +5,7 @@
         <q-input
           v-model="params.directory"
           color="dark"
+          dense
           style="width: 50%"
           @keydown.enter="enterDirectory"
         >
@@ -21,10 +22,14 @@
           <template v-slot:append>
             <q-btn
               color="dark"
+              dense
               flat
               icon="o_refresh"
               @click="enterDirectory"
             ></q-btn>
+
+            <q-btn :icon="shortcut.getIconByUnique(params.directory)" color="primary" dense flat
+                   @click="addBookmark"></q-btn>
             <div style="width: 8px"></div>
           </template>
         </q-input>
@@ -32,6 +37,7 @@
           v-model="params.operation_command"
           clearable
           color="white"
+          dense
           label="cmd"
           standout
           style="width: 50%"
@@ -56,7 +62,7 @@
               :debounce="350"
               color="dark"
               dense
-              label="搜索"
+              label="search"
               @update:model-value="onSearch"
             >
               <template v-slot:append>
@@ -152,6 +158,7 @@ import {downloadFile, executeCMD, getUsers, listDirectory, uploadFile,} from "sr
 import {date, format, useQuasar} from "quasar";
 import {errorLoading, hideLoading, showLoading} from "src/utils/loading";
 import {useRoute, useRouter} from "vue-router";
+import {shortcutStore} from "stores/shortcut";
 
 const columns = [
   {name: "filename", label: "filename", align: "left", field: "filename"},
@@ -181,6 +188,7 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const users = {};
+    const shortcut = shortcutStore()
     const tableData = ref(listResStruct());
     const params = ref({
       directory: "/root",
@@ -194,6 +202,15 @@ export default {
     function onSearch(key) {
       params.value.search = key;
       requestInstance();
+    }
+
+    function addBookmark() {
+      let split_path = params.value.directory.split("/")
+      let name = split_path[split_path.length - 1]
+      let _router = {name: 'fileBrowser', params: {directory: params.value.directory}}
+      let desc = params.value.directory
+      shortcut.addOrUpdateItem(params.value.directory, "o_folder", name, desc, 'folder', _router)
+
     }
 
     function requestExecuteCMD() {
@@ -239,9 +256,7 @@ export default {
     }
 
     function requestInstance() {
-      // 终点改写这里
       tableData.value.pagination.loading = true;
-      // requestXXXX 替换为实际的函数
       listDirectory(params.value.directory)
         .then((res) => {
           if (!users.hasOwnProperty("0")) {
@@ -351,6 +366,8 @@ export default {
       onRejected,
       editFile,
       enterDirectory,
+      addBookmark,
+      shortcut
     };
   },
 };

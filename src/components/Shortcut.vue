@@ -1,15 +1,25 @@
 <template>
   <q-card v-if="Object.keys(ui.items)" class="no-shadow">
     <q-card-section>
-      <div v-for="item in ui.items" :key="item.uniqueKey" class="flex q-gutter-xs items-center">
-        <div class="flex justify-between bg-blue-grey rounded-borders">
+      <div class="flex items-center">
+        <q-icon color="red" name="favorite" size="24px"></q-icon>
+        <div class="text-body1 q-pa-xs">Favorite</div>
+      </div>
+    </q-card-section>
+    <q-card-section>
+      <div class="flex q-gutter-xs items-center">
+        <div v-for="item in ui.items" :key="item.uniqueKey" class="flex justify-between bg-blue-grey rounded-borders">
           <q-btn :icon="item.icon" :label="item.name" flat text-color="white"
-                 @click="navigate(item)"/>
+                 @click="navigate(item)">
+            <q-tooltip>
+              {{ item.description }}
+            </q-tooltip>
+          </q-btn>
           <q-btn-dropdown flat style="max-width: 8px" text-color="white">
             <q-list>
-              <q-item v-close-popup clickable>
+              <q-item v-close-popup clickable @click="deleteItem(item.uniqueKey)">
                 <q-item-section class="text-right">
-                  <q-item-label @click="deleteItem(item.uniqueKey)">Delete</q-item-label>
+                  Delete
                 </q-item-section>
               </q-item>
             </q-list>
@@ -18,7 +28,6 @@
 
       </div>
     </q-card-section>
-
   </q-card>
 </template>
 
