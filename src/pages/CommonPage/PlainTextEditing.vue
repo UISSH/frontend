@@ -18,7 +18,8 @@
           <div class="col-2"></div>
           <div class="col-2">
             <div class="flex justify-end">
-              <q-btn :icon="ui.bookmark.icon" color="primary" dense flat @click="addBookmark"></q-btn>
+              <q-btn :icon="shortcut.getIconByUnique(data.path)" color="primary" dense flat
+                     @click="addBookmark"></q-btn>
               <q-btn dense flat icon="save" @click="requestUpdateFileText">
                 <q-tooltip>Save changes.</q-tooltip>
               </q-btn>
@@ -121,7 +122,10 @@ export default {
         }
       }
       shortcut.addOrUpdateItem(data.value.path, 'o_text_snippet', name, desc, 'edit', _router)
-      ui.value.bookmark.icon = shortcut.getIconByUnique(data.value.path)
+
+      // Trigger UI update
+      data.value.path = ""
+      data.value.path = desc
 
     }
 
@@ -184,7 +188,7 @@ export default {
     });
 
 
-    return {ui, data, requestUpdateFileText, addBookmark};
+    return {ui, data, requestUpdateFileText, addBookmark, shortcut};
   },
 };
 </script>

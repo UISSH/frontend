@@ -204,14 +204,17 @@ export default {
       requestInstance();
     }
 
-    function addBookmark() {
-      let split_path = params.value.directory.split("/")
-      let name = split_path[split_path.length - 1]
-      let _router = {name: 'fileBrowser', params: {directory: params.value.directory}}
-      let desc = params.value.directory
-      shortcut.addOrUpdateItem(params.value.directory, "o_folder", name, desc, 'folder', _router)
+     function addBookmark() {
+       let split_path = params.value.directory.split("/")
+       let name = split_path[split_path.length - 1]
+       let _router = {name: 'fileBrowser', params: {directory: params.value.directory}}
+       let desc = params.value.directory
+       shortcut.addOrUpdateItem(params.value.directory, "o_folder", name, desc, 'folder', _router)
+       // update UI
+       params.value.directory = ""
+       params.value.directory = desc
 
-    }
+     }
 
     function requestExecuteCMD() {
       let data = {

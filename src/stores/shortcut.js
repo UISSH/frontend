@@ -40,7 +40,7 @@ export const shortcutStore = defineStore("shortcut", {
   }, getters: {
     getIconByUnique: (state) => {
       return (uniqueKey) => {
-        console.log(uniqueKey)
+
         if (state.items.hasOwnProperty(uniqueKey)) {
           return 'o_star'
         }
@@ -52,16 +52,7 @@ export const shortcutStore = defineStore("shortcut", {
     async syncFromCloud() {
       let val = await getKV(UNIQUE_KEY)
       if (val.value === null) {
-        this.items = {
-          'hkdsfkhaf': {
-            uniqueKey: 'hkdsfkhaf',
-            icon: "o_home",
-            name: 'index',
-            description: "enter home",
-            cate: "nav",
-            router: {name: 'terminal'}
-          }
-        }
+        this.items = {}
       } else {
         let _data = JSON.parse(val.value)
         this.cate = _data.cate
@@ -88,7 +79,11 @@ export const shortcutStore = defineStore("shortcut", {
       item["description"] = description
       item["cate"] = cate
       item["router"] = router
-      await this.syncToCloud()
+      this.syncToCloud().then(res => {
+        console.log("sync shortcut data successful!")
+      }).catch(err => {
+        console.warn("sync shortcut data failed!")
+      })
     },
 
     async deleteItem(uniqueKey) {
