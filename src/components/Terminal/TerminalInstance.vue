@@ -1,25 +1,29 @@
 <template>
-  <div class="flex  q-gutter-sm items-center content-center q-mb-sm ">
-    <div class="text-green ">{{ props.auth.username }}@{{ props.auth.hostname }}:{{ props.auth.port }}</div>
-    <q-icon :color="connectStatus" name="o_online_prediction" size="18px"></q-icon>
-    <q-btn color="white" dense flat label="reset" style="background-color: #282a36"
-           @click="resizeRemoteTerminal"></q-btn>
-  </div>
-  <q-separator class="bg-white q-mb-sm"></q-separator>
-  <div class="flex flex-center " style="height: calc(100% - 40px);">
-    <div :id="props.uuid" style="width: 100%;height: 100%"></div>
-  </div>
+  <drop-zone @files-dropped="uploadFile">
+    <div class="flex  q-gutter-sm items-center content-center q-mb-sm ">
+      <div class="text-green ">{{ props.auth.username }}@{{ props.auth.hostname }}:{{ props.auth.port }}</div>
+      <q-icon :color="connectStatus" name="o_online_prediction" size="18px"></q-icon>
+      <q-btn color="white" dense flat label="reset" style="background-color: #282a36"
+             @click="resizeRemoteTerminal"></q-btn>
+      <q-btn color="white" dense flat icon="folder" @click="getWorkDir"></q-btn>
+    </div>
+    <q-separator class="bg-white q-mb-sm"></q-separator>
+    <div class="flex flex-center " style="height: calc(100% - 40px);">
+      <div :id="props.uuid" style="width: 100%;height: 100%"></div>
+    </div>
+  </drop-zone>
+
 </template>
 
 <script>
-import {onMounted, onUnmounted, ref} from "vue";
+import {defineComponent, onMounted, onUnmounted, ref} from "vue";
 import {generateUUID4} from "src/utils/generate";
 import {FitAddon} from "xterm-addon-fit";
 import {WebLinksAddon} from "xterm-addon-web-links";
 import {Terminal} from "xterm";
 import {Cookies} from "quasar";
 import {ACCESS_TOKEN} from "src/utils/mutation-types";
-
+import DropZone from "src/components/Terminal/DropZone"
 
 import 'xterm/css/xterm.css'
 import {globalShellCommandStore} from "stores/example-store";
@@ -47,7 +51,6 @@ let basicTheme = {
   brightWhite: '#eff0eb'
 }
 
-//
 // const auth = ref({
 //   hostname: "127.0.0.1",
 //   port: "22",
@@ -56,8 +59,9 @@ let basicTheme = {
 //   private_key: "",
 //   private_key_password: "",
 // });
-export default {
+export default defineComponent({
   name: "TerminalInstance",
+  components: {DropZone},
   props: {
     uuid: {
       type: String
@@ -71,7 +75,6 @@ export default {
   },
   setup(props, {emit}) {
     const v = ref()
-
     const GShellCommand = globalShellCommandStore()
     const term = new Terminal({
       fontFamily: '"Cascadia Code", Menlo, monospace',
@@ -80,7 +83,7 @@ export default {
     });
     const connectStatus = ref('green')
     const fitAddon = new FitAddon();
-
+    let currentWorkDir = '/'
 
     let terminalSocket;
     let terminalSize = {
@@ -152,9 +155,11 @@ export default {
           term.clear();
         } else {
         }
-
-        term.write(data.message);
-
+        if (data.hasOwnProperty('work_dir')) {
+          currentWorkDir = data.work_dir
+        } else {
+          term.write(data.message)
+        }
       };
 
       term.onData((data) => {
@@ -177,6 +182,19 @@ export default {
       }
     )
 
+    function getWorkDir() {
+      terminalSocket.send(
+        JSON.stringify({
+          message: '',
+          method: 'get_work_dir'
+        })
+      );
+    }
+
+    function uploadFile(e) {
+      console.log(e)
+    }
+
 
     onMounted(() => {
       init()
@@ -189,11 +207,11 @@ export default {
       terminalSocket.close()
     })
 
-    return {props, v, connectStatus, resizeRemoteTerminal}
+    return {props, v, connectStatus, resizeRemoteTerminal, uploadFile, getWorkDir}
 
 
   }
-}
+})
 </script>
 
 <style scoped>
