@@ -16,17 +16,19 @@
 </template>
 
 <script>
-import {defineComponent, onMounted, onUnmounted, ref} from "vue";
+import {defineComponent, onMounted, onUnmounted, ref, toRaw} from "vue";
 import {generateUUID4} from "src/utils/generate";
 import {FitAddon} from "xterm-addon-fit";
 import {WebLinksAddon} from "xterm-addon-web-links";
 import {Terminal} from "xterm";
-import {Cookies} from "quasar";
+import {Cookies, useQuasar} from "quasar";
 import {ACCESS_TOKEN} from "src/utils/mutation-types";
 import DropZone from "src/components/Terminal/DropZone"
 
 import 'xterm/css/xterm.css'
 import {globalShellCommandStore} from "stores/example-store";
+import {uploadFileToSFTP} from "src/api/terminal";
+import {errorLoading, hideLoading, showLoading} from "src/utils/loading";
 
 
 let basicTheme = {
@@ -75,6 +77,7 @@ export default defineComponent({
   },
   setup(props, {emit}) {
     const v = ref()
+    const $q = useQuasar()
     const GShellCommand = globalShellCommandStore()
     const term = new Terminal({
       fontFamily: '"Cascadia Code", Menlo, monospace',
@@ -83,7 +86,8 @@ export default defineComponent({
     });
     const connectStatus = ref('green')
     const fitAddon = new FitAddon();
-    let currentWorkDir = '/'
+    let currentWorkDir = '/tmp'
+    let droppedFiles = null
 
     let terminalSocket;
     let terminalSize = {
@@ -157,6 +161,7 @@ export default defineComponent({
         }
         if (data.hasOwnProperty('work_dir')) {
           currentWorkDir = data.work_dir
+          requestUploadFile()
         } else {
           term.write(data.message)
         }
@@ -192,7 +197,21 @@ export default defineComponent({
     }
 
     function uploadFile(e) {
-      console.log(e)
+
+      droppedFiles = e
+      getWorkDir()
+
+    }
+
+    function requestUploadFile() {
+      let file = droppedFiles[0]
+      showLoading($q)
+      uploadFileToSFTP(toRaw(props.auth), currentWorkDir + "/" + file.name, file).then(res => {
+      }).catch(err => {
+        errorLoading($q, err)
+      }).finally(() => {
+        hideLoading($q)
+      })
     }
 
 
