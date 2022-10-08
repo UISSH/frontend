@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.15.3",
-    "ace-builds": "^1.7.0",
+    "ace-builds": "^1.11.2",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "echarts": "^5.3.2",
