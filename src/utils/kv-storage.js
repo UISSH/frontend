@@ -1,4 +1,4 @@
-import {createKV, deleteKV, getKV, updateKV} from "src/api/kvStorage"
+import {deleteKV, getKV, updateKV} from "src/api/kvStorage"
 
 class KVStorage {
   constructor(name) {
@@ -28,8 +28,10 @@ class KVStorage {
     } else {
       this.data = window.localStorage.getItem(this.name)
     }
+
+
     if (this.data && this.cloudData == null) {
-      await this.requestCreateKV(data)
+      await this.requestUpdateKV(this.data)
     }
     return new Promise(resolve => {
       resolve(this.data)
@@ -43,8 +45,8 @@ class KVStorage {
     return this.data
   }
 
-  requestCreateKV(val) {
-    createKV(this.name, val).then(res => {
+  requestUpdateKV(val) {
+    updateKV(this.name, val).then(res => {
       console.info(`sync ${this.name} data successful!`)
     }).catch(err => {
       console.error(`sync ${this.name} data failed!`)
@@ -55,7 +57,7 @@ class KVStorage {
     window.localStorage.setItem(this.name, val)
     this.data = val
     if (this.cloudData == null) {
-      this.requestCreateKV(val)
+      this.requestUpdateKV(val)
     } else {
       console.log("updateKV")
       updateKV(this.name, val).then(res => {
