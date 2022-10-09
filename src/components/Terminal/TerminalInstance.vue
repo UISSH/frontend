@@ -204,6 +204,9 @@ export default defineComponent({
     }
 
     function requestUploadFile() {
+      if (droppedFiles == null || droppedFiles.length <= 0) {
+        return
+      }
       let file = droppedFiles[0]
       showLoading($q)
       uploadFileToSFTP(toRaw(props.auth), currentWorkDir + "/" + file.name, file).then(res => {
