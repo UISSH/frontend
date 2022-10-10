@@ -4,6 +4,12 @@ const api = {
   KVStorage: "/api/KVStorage/",
 };
 
+export function getKVList(params) {
+  return request({
+    url: `${api.KVStorage}${name}`, method: 'get', params: params
+  })
+}
+
 
 export function getKV(name) {
   return request({

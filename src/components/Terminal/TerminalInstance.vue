@@ -177,7 +177,8 @@ export default defineComponent({
     }
 
     GShellCommand.$subscribe((mutation, state) => {
-        if (state.uuidHex.includes(props.uuid)) {
+
+        if (state.uuidHex.includes('all') || state.uuidHex.includes(props.uuid)) {
           terminalSocket.send(
             JSON.stringify({
               message: state.command + " \r",
