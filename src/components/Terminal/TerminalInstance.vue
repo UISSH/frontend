@@ -1,14 +1,16 @@
 <template>
   <drop-zone @files-dropped="uploadFile">
     <div class="flex  q-gutter-sm items-center content-center q-mb-sm ">
+      <q-btn color="white" dense flat icon="o_fit_screen" style="background-color: #282a36"
+             @click="resizeRemoteTerminal">
+        <q-tooltip>fit window size</q-tooltip>
+      </q-btn>
       <div class="text-green ">{{ props.auth.username }}@{{ props.auth.hostname }}:{{ props.auth.port }}</div>
       <q-icon :color="connectStatus" name="o_online_prediction" size="18px"></q-icon>
-      <q-btn color="white" dense flat label="reset" style="background-color: #282a36"
-             @click="resizeRemoteTerminal"></q-btn>
-      <q-btn color="white" dense flat icon="folder" @click="getWorkDir"></q-btn>
+
     </div>
     <q-separator class="bg-white q-mb-sm"></q-separator>
-    <div class="flex flex-center " style="height: calc(100% - 40px);">
+    <div class="flex flex-center " style="height: calc(100vh - 200px);">
       <div :id="props.uuid" style="width: 100%;height: 100%"></div>
     </div>
   </drop-zone>

@@ -54,11 +54,13 @@ function edit(item) {
 }
 
 function closeEditMode() {
+
   editMode.value = false
   requestInstance()
 }
 
 onMounted(() => {
+  console.log("onMounted TermianlSnippets")
   requestInstance()
 })
 
@@ -78,7 +80,12 @@ onMounted(() => {
     <q-card-section>
       <div v-if="resData.results.length>0" class="flex q-gutter-sm">
         <div v-for="item in resData.results" :key="item.key">
-          <q-btn :label="item.key.replace(TERMINAL_SNIPPET_PREFIX,'')" color="blue-grey" @click="edit(item)"></q-btn>
+          <q-btn :label="item.key.replace(TERMINAL_SNIPPET_PREFIX,'')" color="blue-grey" icon="o_text_snippet"
+                 @click="edit(item)">
+            <q-tooltip>
+              <div v-html="item.value.substring(0,200).replaceAll('\n','<br>')"></div>
+            </q-tooltip>
+          </q-btn>
         </div>
       </div>
       <div v-else class="q-pa-md text-center">

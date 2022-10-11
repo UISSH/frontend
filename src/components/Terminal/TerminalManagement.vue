@@ -83,9 +83,10 @@
         </div>
       </q-card-section>
     </q-card>
-    <terminal-snippets keep-alive>
 
-    </terminal-snippets>
+    <terminal-snippets/>
+
+
   </div>
 
 
@@ -189,6 +190,7 @@ export default {
     }
 
     onMounted(() => {
+      console.log("onMounted TerminalManagement")
 
     })
 

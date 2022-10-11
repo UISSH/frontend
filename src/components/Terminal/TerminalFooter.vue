@@ -5,7 +5,6 @@ import {snippetStore} from "stores/snippet";
 
 defineEmits(['send'])
 
-
 let snippet = snippetStore()
 const props = defineProps({
   'activated': {
@@ -29,16 +28,23 @@ const globalShell = ref({
 
 function executeSnippet(value) {
   let g = globalShell.value
-  g.command = value
-  sendCommand()
+  if (g.selected.length <= 0) {
+    GShellCommand.updateMsg(props.currentUuidHex, value)
+  } else if (g.selectAll) {
+    GShellCommand.updateMsg(['all'], value)
+  } else {
+    GShellCommand.updateMsg(g.selected, value)
+  }
 }
 
 function sendCommand() {
+
   let g = globalShell.value
   if (g.selected.length <= 0) {
     GShellCommand.updateMsg(props.currentUuidHex, g.command)
   } else if (g.selectAll) {
     GShellCommand.updateMsg(['all'], g.command)
+    g.command = ''
   } else {
     GShellCommand.updateMsg(g.selected, g.command)
     g.command = ''
@@ -66,7 +72,11 @@ function sendCommand() {
           <div class="text-caption q-mb-sm">Click snippet will be sent to the target terminal for execution</div>
           <div class="flex q-gutter-sm">
             <q-btn v-for="item in snippet.items" :key="item.label" :label="item.label" color="blue-grey"
-                   icon="o_terminal" @click="executeSnippet(item.value)"></q-btn>
+                   icon="o_terminal" @click="executeSnippet(item.value)">
+              <q-tooltip>
+                <div v-html="item.value.substring(0,200).replaceAll('\n','<br>')"></div>
+              </q-tooltip>
+            </q-btn>
           </div>
 
         </div>

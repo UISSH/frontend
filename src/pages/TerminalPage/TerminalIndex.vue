@@ -21,10 +21,13 @@
       </q-tabs>
 
 
-      <q-tab-panels v-model="tab" :keep-alive-include="activeTerminalIndex" animated keep-alive>
+      <q-tab-panels v-model="tab" :keep-alive="true" animated>
         <!--   Host   -->
         <q-tab-panel class="bg-blue-grey-1 q-pa-none " name="home" style="height: calc(100vh -  86px)">
-          <terminal-management keep-alive @openNewTerminalTab="openNewTerminalTab"></terminal-management>
+          <KeepAlive>
+            <terminal-management @openNewTerminalTab="openNewTerminalTab"></terminal-management>
+          </KeepAlive>
+
         </q-tab-panel>
 
         <!--   Instance   -->
