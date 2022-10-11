@@ -11,7 +11,9 @@
         outside-arrows
       >
 
-        <q-tab icon="home" name="home"></q-tab>
+        <q-tab name="home">
+          <q-icon class="q-pa-sm" name="home" size="16px"></q-icon>
+        </q-tab>
         <q-tab v-for="item in activeTerminalIndex" :key="item" :label="instanceOfTerminalOpened[item].name" :name="item"
                no-caps>
           <q-icon class="q-pa-sm q-ml-sm" name="close" size="16px" @click.stop="closeTerminalTab(item)"></q-icon>
@@ -22,7 +24,7 @@
       <q-tab-panels v-model="tab" :keep-alive-include="activeTerminalIndex" animated keep-alive>
         <!--   Host   -->
         <q-tab-panel class="bg-blue-grey-1 q-pa-none " name="home" style="height: calc(100vh -  86px)">
-          <terminal-management @openNewTerminalTab="openNewTerminalTab"></terminal-management>
+          <terminal-management keep-alive @openNewTerminalTab="openNewTerminalTab"></terminal-management>
         </q-tab-panel>
 
         <!--   Instance   -->
@@ -64,7 +66,7 @@ export default {
     const instanceOfTerminalOpened = ref({})
     // [uuid_hex...]
     const activeTerminalIndex = ref([])
-    const globalActivatedShell = ref([])
+    const globalActivatedShell = ref([/*{ label:'',value:''}*/])
     const tab = ref('home') // uuidHex
 
 

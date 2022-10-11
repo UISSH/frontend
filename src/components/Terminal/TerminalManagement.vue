@@ -83,7 +83,7 @@
         </div>
       </q-card-section>
     </q-card>
-    <terminal-snippets>
+    <terminal-snippets keep-alive>
 
     </terminal-snippets>
   </div>

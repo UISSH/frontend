@@ -2,7 +2,7 @@
 
 
 import ace from "ace-builds";
-import "ace-builds/src-noconflict/theme-dracula";
+import "ace-builds/src-noconflict/theme-tomorrow_night_eighties";
 import "ace-builds/src-noconflict/mode-sh";
 import workerJsonUrl from "file-loader?esModule=false!ace-builds/src-noconflict/worker-json.js";
 import {VAceEditor} from "vue3-ace-editor/index";
@@ -40,24 +40,28 @@ function updateValue() {
     return
   }
 
+  showLoading($q)
   if (data.value.created) {
     createKV(TERMINAL_SNIPPET_PREFIX + data.value.name, data.value.content).then(res => {
       data.value.created = false
+    }).finally(() => {
+      hideLoading($q)
     })
   } else {
-    updateKV(TERMINAL_SNIPPET_PREFIX + data.value.name, data.value.content)
+    updateKV(TERMINAL_SNIPPET_PREFIX + data.value.name, data.value.content).finally(() => {
+      hideLoading($q)
+    })
   }
 }
 
 
 onMounted(() => {
-  console.log(props)
+
   if (props.name) {
     data.value.name = props.name
     getValue()
   } else {
     data.value.created = true
-
   }
 
 })
@@ -91,8 +95,8 @@ onMounted(() => {
         :options="{ useWorker: true,wrap: true }"
         :print-margin="false"
         lang="sh"
-        style="min-height: 300px;"
-        theme="dracula"
+        style="min-height: 450px;"
+        theme="tomorrow_night_eighties"
       />
     </q-card-section>
 

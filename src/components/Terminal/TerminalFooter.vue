@@ -1,12 +1,15 @@
 <script setup>
 import {ref} from "vue";
 import {globalShellCommandStore} from "stores/example-store";
+import {snippetStore} from "stores/snippet";
 
 defineEmits(['send'])
 
+
+let snippet = snippetStore()
 const props = defineProps({
   'activated': {
-    type: [Object],
+    type: [Object],/*{ label:'',value:''}*/
     required: true
   },
   'currentUuidHex': {
@@ -23,6 +26,12 @@ const globalShell = ref({
   selected: [],// ['uuidHex','uuidHex',...]
   options: []
 })
+
+function executeSnippet(value) {
+  let g = globalShell.value
+  g.command = value
+  sendCommand()
+}
 
 function sendCommand() {
   let g = globalShell.value
@@ -53,13 +62,13 @@ function sendCommand() {
         </div>
 
         <div class="col-12">
-          <div class="text-h6 q-mb-sm">Snippets</div>
-          <q-option-group
-            v-model="globalShell.selected"
-            :options="props.activated"
-            inline
-            type="checkbox"
-          />
+          <div class="text-h6 ">Snippets</div>
+          <div class="text-caption q-mb-sm">Click snippet will be sent to the target terminal for execution</div>
+          <div class="flex q-gutter-sm">
+            <q-btn v-for="item in snippet.items" :key="item.label" :label="item.label" color="blue-grey"
+                   icon="o_terminal" @click="executeSnippet(item.value)"></q-btn>
+          </div>
+
         </div>
       </div>
     </q-btn-dropdown>
