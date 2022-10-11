@@ -1,6 +1,8 @@
 <template>
   <q-page class="q-gutter-md bg-blue-grey-1">
+    <Shortcut></Shortcut>
     <SystemStatus></SystemStatus>
+
     <q-card class="shadow-0 ">
       <q-card-section class="text-uppercase">
         {{ $t("charts") }}
@@ -16,6 +18,7 @@
 import {onMounted, ref} from "vue";
 import NetworkTrafficChart from "components/chart/NetworkTrafficChart";
 import SystemStatus from "components/chart/SystemStatus";
+import Shortcut from "components/Shortcut";
 
 const ui = ref({
   systemStatus: {
@@ -48,7 +51,7 @@ const Public = {
 const data = ref({});
 export default {
   name: "OverviewIndex",
-  components: {NetworkTrafficChart, SystemStatus},
+  components: {NetworkTrafficChart, SystemStatus,Shortcut},
   setup() {
     onMounted(() => {
     });

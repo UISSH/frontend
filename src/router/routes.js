@@ -55,7 +55,7 @@ const routes = [
       },
 
       {
-        path: "terminal",
+        path: "terminal/:name?",
         name: "terminal",
         component: () => import("pages/TerminalPage/TerminalIndex.vue"),
       },

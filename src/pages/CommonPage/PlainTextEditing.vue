@@ -18,7 +18,9 @@
           <div class="col-2"></div>
           <div class="col-2">
             <div class="flex justify-end">
-              <q-btn flat icon="save" @click="requestUpdateFileText">
+              <q-btn :icon="shortcut.getIconByUnique(data.path)" color="primary" dense flat
+                     @click="addBookmark"></q-btn>
+              <q-btn dense flat icon="save" @click="requestUpdateFileText">
                 <q-tooltip>Save changes.</q-tooltip>
               </q-btn>
             </div>
@@ -76,6 +78,7 @@ import {useRoute} from "vue-router";
 import ace from "ace-builds";
 import workerJsonUrl from "file-loader?esModule=false!ace-builds/src-noconflict/worker-json.js";
 import {detection} from "src/utils/detection-type";
+import {shortcutStore} from "stores/shortcut";
 
 ace.config.setModuleUrl("ace/mode/json_worker", workerJsonUrl);
 
@@ -84,7 +87,14 @@ export default {
   components: {VAceEditor},
 
   setup() {
+    const shortcut = shortcutStore()
+
     const $q = useQuasar();
+    const data = ref({
+      text: "",
+      type: "text",
+      path: '',
+    });
     const ui = ref({
       errMsg: {
         show: false,
@@ -94,12 +104,30 @@ export default {
         useWorker: true,
         wrap: true,
       },
+      bookmark: {
+        icon: 'o_star'
+      }
     });
-    const data = ref({
-      text: "",
-      type: "text",
-      path: null,
-    });
+
+
+    function addBookmark() {
+
+      let pathSplit = data.value.path.split('/')
+      let name = pathSplit[pathSplit.length - 1]
+      let desc = data.value.path
+      let _router = {
+        name: 'plainTextEditing',
+        params: {
+          path: data.value.path
+        }
+      }
+      shortcut.addOrUpdateItem(data.value.path, 'o_text_snippet', name, desc, 'edit', _router)
+
+      // Trigger UI update
+      data.value.path = ""
+      data.value.path = desc
+
+    }
 
     function requestGetFileText() {
       showLoading($q);
@@ -152,13 +180,15 @@ export default {
       }
 
       document.addEventListener("keydown", saveContent, false);
+      ui.value.bookmark.icon = shortcut.getIconByUnique(data.value.path)
     });
 
     onUnmounted(() => {
       document.removeEventListener("keydown", saveContent, false);
     });
 
-    return {ui, data, requestUpdateFileText};
+
+    return {ui, data, requestUpdateFileText, addBookmark, shortcut};
   },
 };
 </script>

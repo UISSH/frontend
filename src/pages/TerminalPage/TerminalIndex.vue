@@ -11,7 +11,9 @@
         outside-arrows
       >
 
-        <q-tab icon="home" name="home"></q-tab>
+        <q-tab name="home">
+          <q-icon class="q-pa-sm" name="home" size="16px"></q-icon>
+        </q-tab>
         <q-tab v-for="item in activeTerminalIndex" :key="item" :label="instanceOfTerminalOpened[item].name" :name="item"
                no-caps>
           <q-icon class="q-pa-sm q-ml-sm" name="close" size="16px" @click.stop="closeTerminalTab(item)"></q-icon>
@@ -19,16 +21,20 @@
       </q-tabs>
 
 
-      <q-tab-panels v-model="tab" :keep-alive-include="activeTerminalIndex" animated keep-alive>
+      <q-tab-panels v-model="tab" :keep-alive="true" animated>
         <!--   Host   -->
         <q-tab-panel class="bg-blue-grey-1 q-pa-none " name="home" style="height: calc(100vh -  86px)">
-          <terminal-management @openNewTerminalTab="openNewTerminalTab"></terminal-management>
+          <KeepAlive>
+            <terminal-management @openNewTerminalTab="openNewTerminalTab"></terminal-management>
+          </KeepAlive>
+
         </q-tab-panel>
 
         <!--   Instance   -->
         <q-tab-panel v-for="uuidhex in activeTerminalIndex" :key="uuidhex"
                      :name="uuidhex" style="height: calc(100vh -  130px);width: 100%;background-color: #282a36">
-          <terminal-instance v-model:title="instanceOfTerminalOpened[uuidhex].name" :auth="instanceOfTerminalOpened[uuidhex].auth"
+          <terminal-instance v-model:title="instanceOfTerminalOpened[uuidhex].name"
+                             :auth="instanceOfTerminalOpened[uuidhex].auth"
                              :uuid="uuidhex"></terminal-instance>
         </q-tab-panel>
 
@@ -37,23 +43,7 @@
 
     </q-card>
     <q-footer v-if="tab!=='home'">
-      <div class="flex justify-between no-wrap">
-        <q-btn-dropdown color="primary" icon="density_medium">
-          <q-card>
-            <q-card-section class="q-pl-sm ">
-              <q-option-group
-                v-model="globalShell.selected"
-                :options="globalShell.options"
-                type="checkbox"
-              />
-            </q-card-section>
-
-          </q-card>
-        </q-btn-dropdown>
-        <q-input v-model="globalShell.command" dark dense filled style="width: 100%"
-                 @keydown.enter="sendCommand"></q-input>
-        <q-btn icon="send" @click="sendCommand" @keydown.enter="sendCommand"></q-btn>
-      </div>
+      <terminal-footer :activated="globalActivatedShell" :currentUuidHex="tab"></terminal-footer>
     </q-footer>
   </q-page>
 
@@ -64,15 +54,14 @@
 import {onBeforeUnmount, onMounted, ref} from "vue";
 import TerminalInstance from "components/Terminal/TerminalInstance";
 import TerminalManagement from "components/Terminal/TerminalManagement";
+import TerminalFooter from "components/Terminal/TerminalFooter";
 import {generateUUID4} from "src/utils/generate";
-import {globalShellCommand} from "stores/example-store";
 
 
 export default {
   name: "TerminalIndex",
-  components: {TerminalInstance, TerminalManagement},
+  components: {TerminalInstance, TerminalManagement, TerminalFooter},
   setup() {
-    const GShellCommand = globalShellCommand()
 
     //{
     //   "uuid_hex":{'name': '', 'auth': {}}
@@ -80,20 +69,17 @@ export default {
     const instanceOfTerminalOpened = ref({})
     // [uuid_hex...]
     const activeTerminalIndex = ref([])
-
+    const globalActivatedShell = ref([/*{ label:'',value:''}*/])
     const tab = ref('home') // uuidHex
 
-    const globalShell = ref({
-      command: '',
-      selectAll: false,
-      selected: [],// ['uuidHex','uuidHex',...]
-      options: []
-    })
 
     function syncGlobalShellOptions() {
-      globalShell.value.options = []
+      /*
+      * Update the activated terminal in the terminal selection box.
+      * */
+      globalActivatedShell.value = []
       for (let uuidHex of activeTerminalIndex.value) {
-        globalShell.value.options.push({"label": instanceOfTerminalOpened.value[uuidHex].name, "value": uuidHex})
+        globalActivatedShell.value.push({"label": instanceOfTerminalOpened.value[uuidHex].name, "value": uuidHex})
 
       }
 
@@ -104,7 +90,7 @@ export default {
       instanceOfTerminalOpened.value[_key] = data
       activeTerminalIndex.value.push(_key)
       tab.value = _key
-      // globalShell.value.options.push({"label": data.name, "value": _key})
+      // globalActivatedShell.value.push({"label": data.name, "value": _key})
       syncGlobalShellOptions()
     }
 
@@ -112,19 +98,8 @@ export default {
     function closeTerminalTab(v) {
       // delete v from activeTerminalIndex
       activeTerminalIndex.value = activeTerminalIndex.value.filter((val => val !== v))
-      globalShell.value.selected = globalShell.value.selected.filter((val => val !== v))
       syncGlobalShellOptions()
       tab.value = 'home'
-    }
-
-    function sendCommand() {
-
-      if (globalShell.value.selected.length <= 0) {
-        GShellCommand.updateMsg([tab.value], globalShell.value.command)
-      } else {
-        GShellCommand.updateMsg(globalShell.value.selected, globalShell.value.command)
-      }
-      globalShell.value.command = ''
     }
 
 
@@ -141,10 +116,9 @@ export default {
       tab,
       instanceOfTerminalOpened,
       activeTerminalIndex,
-      globalShell,
       closeTerminalTab,
       openNewTerminalTab,
-      sendCommand
+      globalActivatedShell
 
     }
   }
