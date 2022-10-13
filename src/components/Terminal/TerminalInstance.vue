@@ -163,7 +163,12 @@ export default defineComponent({
         }
         if (data.hasOwnProperty('work_dir')) {
           currentWorkDir = data.work_dir
-          requestUploadFile()
+          if (!currentWorkDir.startsWith("/") || currentWorkDir.includes(" ")) {
+            setTimeout(getWorkDir, 1000)
+          } else {
+            requestUploadFile()
+          }
+
         } else {
           term.write(data.message)
         }
