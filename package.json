@@ -13,7 +13,7 @@
   "dependencies": {
     "@quasar/extras": "^1.15.4",
     "ace-builds": "^1.11.2",
-    "axios": "^1.1.2",
+    "axios": "^1.2.0",
     "core-js": "^3.6.5",
     "echarts": "^5.4.0",
     "pinia": "^2.0.22",
